@@ -15,6 +15,7 @@ class YLIASTER_API UVVTile : public UBoxComponent
 	GENERATED_BODY()
 protected:
 	UVVTile();
+	
 
 	UFUNCTION(BlueprintCallable, Category = "Cursor")
 	void OnCursorOverlapBegin(UPrimitiveComponent* TouchedComponent);
@@ -39,4 +40,8 @@ public:
 	int32 XCoordinate;
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	int32 YCoordinate;
+
+	// -1 is impassable
+	UPROPERTY(EditAnywhere, Category = "Tile")
+	int32 TraversalCost = 1;
 };

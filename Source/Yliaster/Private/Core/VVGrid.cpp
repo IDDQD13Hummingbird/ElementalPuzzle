@@ -98,6 +98,44 @@ void AVVGrid::PopulateGrid()
 	}
 }
 
+TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
+{
+	TArray<UVVTile*> Path;
+
+	if (!StartTile->IsAttachedTo(RootComponent) || !EndTile->IsAttachedTo(RootComponent))
+		return Path;
+
+
+	TMap<UVVTile*, int> SearchedTiles;
+	TMap<UVVTile*, int32> UnsearchedTiles;
+	UnsearchedTiles.Add(StartTile, 0);
+
+	while (!UnsearchedTiles.Contains(EndTile))
+	{
+		UnsearchedTiles.ValueSort([](int32 A, int32 B) {return A < B; });
+
+		TArray<UVVTile*> KeyArray;
+		UnsearchedTiles.GenerateKeyArray(KeyArray);
+		UVVTile* CurrentTile = KeyArray[0];
+		// From adjacent unsearched tiles find the tile with lowest (Cost + Distance)
+		for (UVVTile* Neighbor : CurrentTile->Adjacents)
+		{
+			if (Neighbor && Neighbor->TraversalCost != -1)
+				UnsearchedTiles.Add(Neighbor, Neighbor->TraversalCost + *UnsearchedTiles.Find(CurrentTile));
+		}
+	}
+	
+	
+	
+
+	return Path;
+}
+
+int32 AVVGrid::ManhattenDistance(UVVTile* TileA, UVVTile* TileB)
+{
+	return abs(TileB->XCoordinate - TileA->XCoordinate) + abs(TileB->YCoordinate - TileA->YCoordinate);
+}
+
 
 void AVVGrid::AssignNeighbors(UVVTile* Target)
 {

@@ -59,4 +59,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")
 	void PopulateGrid();
+
+	UFUNCTION(BlueprintCallable, Category = "Grid")
+	TArray<UVVTile*> FindPath(UVVTile* StartTile, UVVTile* EndTile);
+
+	UFUNCTION(BlueprintCallable, Category = "Grid")
+	int32 ManhattenDistance(UVVTile* TileA, UVVTile* TileB);
 };
