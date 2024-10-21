@@ -39,7 +39,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UCapsuleComponent* CharRoot;
 
-	//
+	// Target tile for character to move to
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Component")
 	UBoxComponent* Target;
 
