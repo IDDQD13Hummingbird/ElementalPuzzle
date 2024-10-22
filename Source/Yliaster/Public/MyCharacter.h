@@ -42,6 +42,7 @@ public:
 	// Target tile for character to move to
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Component")
 	UBoxComponent* Target;
+	// USE GetComponentLocation for tracking target of the character
 
 
 	// VARIABLES
