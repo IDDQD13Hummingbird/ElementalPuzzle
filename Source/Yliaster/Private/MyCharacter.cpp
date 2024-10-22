@@ -2,6 +2,7 @@
 
 
 #include "MyCharacter.h"
+#include "InventoryComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -16,6 +17,9 @@ AMyCharacter::AMyCharacter()
 	// Creating the Mesh component
 	CharMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	CharMesh->SetupAttachment(RootComponent);
+
+	InventoryReference = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+	//Inventory->Capacity = 5;
 
 }
 
