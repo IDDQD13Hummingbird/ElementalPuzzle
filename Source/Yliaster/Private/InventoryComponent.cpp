@@ -37,6 +37,7 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 bool UInventoryComponent::AddItem(UItem* Item)
 {
 	//InventoryStack.push(Item);
+	// WHY CAN I NOT PUSH THE ITEM INTO THE STACK?????? :(
 	return false;
 }
 
