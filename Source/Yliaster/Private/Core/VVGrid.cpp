@@ -105,29 +105,60 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 	if (!StartTile->IsAttachedTo(RootComponent) || !EndTile->IsAttachedTo(RootComponent))
 		return Path;
 
-
-	TMap<UVVTile*, int> SearchedTiles;
-	TMap<UVVTile*, int32> UnsearchedTiles;
-	UnsearchedTiles.Add(StartTile, 0);
-
-	while (!UnsearchedTiles.Contains(EndTile))
+	struct TileNode
 	{
-		UnsearchedTiles.ValueSort([](int32 A, int32 B) {return A < B; });
+		int32 TotalTraversed;
+		int32 PathValue;
+	};
 
+	struct TileTree
+	{
+		UVVTile* Parent;
+		TArray<UVVTile*> Children;
+	};
+	
+	TMap<UVVTile*, UVVTile*> SearchedTiles;
+	TMap<UVVTile*, TileNode> UnsearchedTiles;
+	UVVTile* CurrentTile = nullptr;
+	UnsearchedTiles.Add(StartTile, TileNode(0, ManhattenDistance(StartTile, EndTile)));
+
+	int32 SearchCount = 0;
+	while (SearchCount < Columns * Rows)
+	{
+		// Get the tile with the lowest cost (TotalTraversed + Manhattan)
+		UnsearchedTiles.ValueSort([](TileNode A, TileNode B) {return A.PathValue < B.PathValue; });
 		TArray<UVVTile*> KeyArray;
 		UnsearchedTiles.GenerateKeyArray(KeyArray);
-		UVVTile* CurrentTile = KeyArray[0];
-		// From adjacent unsearched tiles find the tile with lowest (Cost + Distance)
+		// Add it to Searched, Set as Current and Remove it from Unsearched
+		SearchedTiles.Add(KeyArray[0], CurrentTile);
+		CurrentTile = KeyArray[0];
+		UnsearchedTiles.FindAndRemoveChecked(CurrentTile);
+
+		// If we reached the end tile
+		if (CurrentTile == EndTile)
+		{
+			while (SearchedTiles.Find(CurrentTile))
+			{
+				Path.EmplaceAt(0, CurrentTile);
+				CurrentTile = *SearchedTiles.Find(CurrentTile);
+
+				return Path;
+			}
+		}
+			
+		// Add each traversable tile that is not in Searched to Unsearched
 		for (UVVTile* Neighbor : CurrentTile->Adjacents)
 		{
-			if (Neighbor && Neighbor->TraversalCost != -1)
-				UnsearchedTiles.Add(Neighbor, Neighbor->TraversalCost + *UnsearchedTiles.Find(CurrentTile));
+			TileNode* CurrentTileValues = UnsearchedTiles.Find(CurrentTile);
+			if (Neighbor && Neighbor->TraversalCost != -1 && !SearchedTiles.Contains(Neighbor))
+			{
+				int32 TraversedTotal = CurrentTileValues->PathValue + Neighbor->TraversalCost;
+				UnsearchedTiles.Add(Neighbor, TileNode(TraversedTotal, TraversedTotal + CurrentTileValues->PathValue));
+			}
 		}
-	}
-	
-	
-	
 
+		SearchCount++;
+	}
 	return Path;
 }
 
