@@ -37,14 +37,18 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 bool UInventoryComponent::AddItem(AMyElement* Item)
 {
-	//InventoryStack.push(Item);
+	InventoryStack.Push(Item);
 	// WHY CAN I NOT PUSH THE ITEM INTO THE STACK?????? :(
 	return false;
 }
 
 bool UInventoryComponent::RemoveItem(AMyElement* Item)
 {
+<<<<<<< HEAD
 //	InventoryStack.pop();
+=======
+	InventoryStack.Pop();
+>>>>>>> fbe3984 (Fixed syntax)
 	return false;
 }
 
