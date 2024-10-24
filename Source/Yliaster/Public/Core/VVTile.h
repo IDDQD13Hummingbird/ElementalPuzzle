@@ -6,6 +6,9 @@
 #include "Components/BoxComponent.h"
 #include "VVTile.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileOnClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y);
+
 /**
  * 
  */
@@ -28,6 +31,8 @@ protected:
 
 public:
 	virtual void BeginPlay() override;
+
+	FTileOnClickedSignature TileClickDelegate;
 
 	// 0 = North, 1 = East, 2 = South, 3 = South
 	UPROPERTY(EditAnywhere, Category = "Tile")

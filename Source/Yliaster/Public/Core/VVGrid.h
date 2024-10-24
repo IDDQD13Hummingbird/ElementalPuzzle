@@ -50,6 +50,9 @@ public:
 	virtual void OnConstruction(const FTransform& Transform);
 
 	UFUNCTION()
+	void OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y);
+
+	UFUNCTION()
 	int32 IndexFromCoords(int32 X, int32 Y);
 	UFUNCTION()
 	FIntCoord CoordsFromIndex(int32 Index);

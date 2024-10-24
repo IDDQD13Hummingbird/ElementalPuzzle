@@ -17,7 +17,14 @@ AVVGrid::AVVGrid()
 void AVVGrid::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	TArray<USceneComponent*> Tiles;
+	RootComponent->GetChildrenComponents(false, Tiles);
+	for (USceneComponent* var : Tiles)
+	{
+		if (UVVTile* Tile = Cast<UVVTile>(var))
+			Tile->TileClickDelegate.AddDynamic(this, &AVVGrid::OnTileClicked);
+	}
 }
 
 
@@ -29,6 +36,14 @@ void AVVGrid::OnConstruction(const FTransform& Transform)
 		return;
 	
 	PopulateGrid();
+}
+
+void AVVGrid::OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Purple, FString::Printf(TEXT("Coordinates are X: %i, Y: %i"), X, Y));
+	}
 }
 
 int32 AVVGrid::IndexFromCoords(int32 X, int32 Y)
