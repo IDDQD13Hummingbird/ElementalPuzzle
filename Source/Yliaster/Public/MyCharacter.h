@@ -55,6 +55,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
 	float BaseMoveSpeed = 10.0f;
 
+
+	// FUNCTIONS
+
+
+	//UFUNCTION()
+	//void MoveCharacter();
+
+	UFUNCTION()
+	FVector GetCharLocation();
+
 };
 
 //

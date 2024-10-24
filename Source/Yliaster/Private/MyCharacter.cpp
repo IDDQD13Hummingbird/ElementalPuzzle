@@ -3,6 +3,7 @@
 
 #include "MyCharacter.h"
 #include "InventoryComponent.h"
+#include "Core/VVGrid.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -21,6 +22,8 @@ AMyCharacter::AMyCharacter()
 	InventoryReference = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	//Inventory->Capacity = 5;
 
+	Target = CreateDefaultSubobject<UBoxComponent>(TEXT("Target"));
+
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +37,20 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	GetActorLocation();
+
 
 }
+
+FVector AMyCharacter::GetCharLocation()
+{
+
+	return FVector();
+}
+
+//void AMyCharacter::MoveCharacter() 
+//{
+//	BaseMoveSpeed = 20.0f;
+//
+//}
 
