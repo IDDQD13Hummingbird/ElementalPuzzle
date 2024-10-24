@@ -40,10 +40,7 @@ void AVVGrid::OnConstruction(const FTransform& Transform)
 
 void AVVGrid::OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Purple, FString::Printf(TEXT("Coordinates are X: %i, Y: %i"), X, Y));
-	}
+	TileClickedDelegate.Broadcast(TileClicked, X, Y);
 }
 
 int32 AVVGrid::IndexFromCoords(int32 X, int32 Y)

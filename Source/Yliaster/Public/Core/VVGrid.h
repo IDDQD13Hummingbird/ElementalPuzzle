@@ -8,6 +8,8 @@
 
 class UVVTile;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y);
+
 USTRUCT()
 struct FIntCoord
 {
@@ -48,6 +50,8 @@ protected:
 
 public:	
 	virtual void OnConstruction(const FTransform& Transform);
+
+	FTileClickedSignature TileClickedDelegate;
 
 	UFUNCTION()
 	void OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y);
