@@ -17,7 +17,14 @@ AVVGrid::AVVGrid()
 void AVVGrid::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	TArray<USceneComponent*> Tiles;
+	RootComponent->GetChildrenComponents(false, Tiles);
+	for (USceneComponent* var : Tiles)
+	{
+		if (UVVTile* Tile = Cast<UVVTile>(var))
+			Tile->TileClickDelegate.AddDynamic(this, &AVVGrid::OnTileClicked);
+	}
 }
 
 
@@ -29,6 +36,11 @@ void AVVGrid::OnConstruction(const FTransform& Transform)
 		return;
 	
 	PopulateGrid();
+}
+
+void AVVGrid::OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y)
+{
+	TileClickedDelegate.Broadcast(TileClicked, X, Y);
 }
 
 int32 AVVGrid::IndexFromCoords(int32 X, int32 Y)
@@ -96,6 +108,75 @@ void AVVGrid::PopulateGrid()
 		if (UVVTile* Tile = Cast<UVVTile>(var))
 			AssignNeighbors(Tile);
 	}
+}
+
+TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
+{
+	TArray<UVVTile*> Path;
+
+	if (!StartTile->IsAttachedTo(RootComponent) || !EndTile->IsAttachedTo(RootComponent))
+		return Path;
+
+	struct TileNode
+	{
+		int32 TotalTraversed;
+		int32 PathValue;
+	};
+
+	struct TileTree
+	{
+		UVVTile* Parent;
+		TArray<UVVTile*> Children;
+	};
+	
+	TMap<UVVTile*, UVVTile*> SearchedTiles;
+	TMap<UVVTile*, TileNode> UnsearchedTiles;
+	UVVTile* CurrentTile = nullptr;
+	UnsearchedTiles.Add(StartTile, TileNode(0, ManhattenDistance(StartTile, EndTile)));
+
+	int32 SearchCount = 0;
+	while (SearchCount < Columns * Rows)
+	{
+		// Get the tile with the lowest cost (TotalTraversed + Manhattan)
+		UnsearchedTiles.ValueSort([](TileNode A, TileNode B) {return A.PathValue < B.PathValue; });
+		TArray<UVVTile*> KeyArray;
+		UnsearchedTiles.GenerateKeyArray(KeyArray);
+		// Add it to Searched, Set as Current and Remove it from Unsearched
+		SearchedTiles.Add(KeyArray[0], CurrentTile);
+		CurrentTile = KeyArray[0];
+		UnsearchedTiles.FindAndRemoveChecked(CurrentTile);
+
+		// If we reached the end tile
+		if (CurrentTile == EndTile)
+		{
+			while (SearchedTiles.Find(CurrentTile))
+			{
+				Path.EmplaceAt(0, CurrentTile);
+				CurrentTile = *SearchedTiles.Find(CurrentTile);
+
+				return Path;
+			}
+		}
+			
+		// Add each traversable tile that is not in Searched to Unsearched
+		for (UVVTile* Neighbor : CurrentTile->Adjacents)
+		{
+			TileNode* CurrentTileValues = UnsearchedTiles.Find(CurrentTile);
+			if (Neighbor && Neighbor->TraversalCost != -1 && !SearchedTiles.Contains(Neighbor))
+			{
+				int32 TraversedTotal = CurrentTileValues->PathValue + Neighbor->TraversalCost;
+				UnsearchedTiles.Add(Neighbor, TileNode(TraversedTotal, TraversedTotal + CurrentTileValues->PathValue));
+			}
+		}
+
+		SearchCount++;
+	}
+	return Path;
+}
+
+int32 AVVGrid::ManhattenDistance(UVVTile* TileA, UVVTile* TileB)
+{
+	return abs(TileB->XCoordinate - TileA->XCoordinate) + abs(TileB->YCoordinate - TileA->YCoordinate);
 }
 
 

@@ -6,6 +6,9 @@
 #include "Components/BoxComponent.h"
 #include "VVTile.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileOnClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y);
+
 /**
  * 
  */
@@ -15,6 +18,7 @@ class YLIASTER_API UVVTile : public UBoxComponent
 	GENERATED_BODY()
 protected:
 	UVVTile();
+	
 
 	UFUNCTION(BlueprintCallable, Category = "Cursor")
 	void OnCursorOverlapBegin(UPrimitiveComponent* TouchedComponent);
@@ -28,6 +32,8 @@ protected:
 public:
 	virtual void BeginPlay() override;
 
+	FTileOnClickedSignature TileClickDelegate;
+
 	// 0 = North, 1 = East, 2 = South, 3 = South
 	UPROPERTY(EditAnywhere, Category = "Tile")
 	TArray<UVVTile*> Adjacents;
@@ -39,4 +45,8 @@ public:
 	int32 XCoordinate;
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	int32 YCoordinate;
+
+	// -1 is impassable
+	UPROPERTY(EditAnywhere, Category = "Tile")
+	int32 TraversalCost = 1;
 };

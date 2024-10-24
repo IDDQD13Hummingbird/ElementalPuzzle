@@ -8,6 +8,8 @@
 
 class UVVTile;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y);
+
 USTRUCT()
 struct FIntCoord
 {
@@ -49,6 +51,11 @@ protected:
 public:	
 	virtual void OnConstruction(const FTransform& Transform);
 
+	FTileClickedSignature TileClickedDelegate;
+
+	UFUNCTION()
+	void OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y);
+
 	UFUNCTION()
 	int32 IndexFromCoords(int32 X, int32 Y);
 	UFUNCTION()
@@ -59,4 +66,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")
 	void PopulateGrid();
+
+	UFUNCTION(BlueprintCallable, Category = "Grid")
+	TArray<UVVTile*> FindPath(UVVTile* StartTile, UVVTile* EndTile);
+
+	UFUNCTION(BlueprintCallable, Category = "Grid")
+	int32 ManhattenDistance(UVVTile* TileA, UVVTile* TileB);
 };
