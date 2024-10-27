@@ -46,7 +46,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	int32 YCoordinate;
 
-	// -1 is impassable
+	// Negative values are impassable
 	UPROPERTY(EditAnywhere, Category = "Tile")
 	int32 TraversalCost = 1;
 };

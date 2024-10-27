@@ -162,7 +162,7 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 		for (UVVTile* Neighbor : CurrentTile->Adjacents)
 		{
 			TileNode* CurrentTileValues = UnsearchedTiles.Find(CurrentTile);
-			if (Neighbor && Neighbor->TraversalCost != -1 && !SearchedTiles.Contains(Neighbor))
+			if (Neighbor && Neighbor->TraversalCost >= 0 && !SearchedTiles.Contains(Neighbor))
 			{
 				int32 TraversedTotal = CurrentTileValues->PathValue + Neighbor->TraversalCost;
 				UnsearchedTiles.Add(Neighbor, TileNode(TraversedTotal, TraversedTotal + CurrentTileValues->PathValue));
