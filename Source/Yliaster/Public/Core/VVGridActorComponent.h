@@ -6,6 +6,11 @@
 #include "Components/BoxComponent.h"
 #include "VVGridActorComponent.generated.h"
 
+class UVVTile;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTileObjectClickedSignature, FKey, ButtonPressed);
+
+
 /**
  * 
  */
@@ -25,10 +30,10 @@ protected:
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UFUNCTION()
-	void TileClicked(UVVTile* TileClicked, int32 X, int32 Y);
+	void TileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed);
 
 public:
 	virtual void BeginPlay() override;
 
-
+	FTileObjectClickedSignature ObjectClickedDelegate;
 };

@@ -7,7 +7,7 @@
 #include "VVTile.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileOnClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FTileOnClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y, FKey, ButtonPressed);
 
 /**
  * 

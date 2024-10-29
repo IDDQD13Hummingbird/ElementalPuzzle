@@ -38,9 +38,9 @@ void AVVGrid::OnConstruction(const FTransform& Transform)
 	PopulateGrid();
 }
 
-void AVVGrid::OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y)
+void AVVGrid::OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed)
 {
-	TileClickedDelegate.Broadcast(TileClicked, X, Y);
+	TileClickedDelegate.Broadcast(TileClicked, X, Y, ButtonPressed);
 }
 
 int32 AVVGrid::IndexFromCoords(int32 X, int32 Y)

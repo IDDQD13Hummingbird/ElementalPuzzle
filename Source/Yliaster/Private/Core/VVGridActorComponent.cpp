@@ -12,6 +12,8 @@ void UVVGridActorComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedCompon
 			OverlappedTile->TraversalCost *= -1;
 		else
 			OverlappedTile->TraversalCost += CostModifier;
+
+		OverlappedTile->TileClickDelegate.AddDynamic(this, &UVVGridActorComponent::TileClicked);
 	}
 }
 
@@ -23,11 +25,14 @@ void UVVGridActorComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComponen
 			OverlappedTile->TraversalCost *= -1;
 		else
 			OverlappedTile->TraversalCost -= CostModifier;
+
+		OverlappedTile->TileClickDelegate.RemoveDynamic(this, &UVVGridActorComponent::TileClicked);
 	}
 }
 
-void UVVGridActorComponent::TileClicked(UVVTile* TileClicked, int32 X, int32 Y)
+void UVVGridActorComponent::TileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed)
 {
+	ObjectClickedDelegate.Broadcast(ButtonPressed);
 }
 
 void UVVGridActorComponent::BeginPlay()
