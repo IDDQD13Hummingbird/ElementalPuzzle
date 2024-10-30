@@ -15,6 +15,10 @@ AMyCharacter::AMyCharacter()
 	CharRoot = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Root"));
 	RootComponent = CharRoot;
 
+	// Creating the interaction box and attaching it to the character's mesh
+	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Interaction Box"));
+	InteractionBox->SetupAttachment(CharMesh);
+
 	// Creating the Mesh component
 	CharMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	CharMesh->SetupAttachment(RootComponent);
@@ -30,6 +34,9 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::InteractOnOverlap);
+	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &AMyCharacter::InteractEnd);
 	
 }
 
@@ -48,9 +55,31 @@ FVector AMyCharacter::GetCharLocation()
 	return FVector();
 }
 
+void AMyCharacter::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlapping"));
+	Interface = Cast<IInteractionInterface>(OtherActor);
+}
+
+void AMyCharacter::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping"));
+	Interface = nullptr;
+}
+
+void AMyCharacter::InteractOnInput()
+{
+	if (Interface)
+	{
+		Interface->InteractWithThis(); //calls the function of the same name in the object it interacts with
+	}
+}
+
 //void AMyCharacter::MoveCharacter() 
 //{
 //	BaseMoveSpeed = 20.0f;
 //
 //}
+
+//void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {}
 
