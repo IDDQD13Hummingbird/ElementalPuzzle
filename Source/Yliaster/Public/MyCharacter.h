@@ -8,10 +8,12 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "InteractionInterface.h"
+
 #include "MyCharacter.generated.h"
 
 UCLASS()
-class YLIASTER_API AMyCharacter : public AActor
+class YLIASTER_API AMyCharacter : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -35,6 +37,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UStaticMeshComponent* CharMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	UBoxComponent* InteractionBox;
+
 	//Character's Root Component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UCapsuleComponent* CharRoot;
@@ -47,6 +52,8 @@ public:
 	// Reference to inventory component
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	class UInventoryComponent* InventoryReference;
+
+	IInteractionInterface* Interface = nullptr;
 
 
 	// VARIABLES
@@ -64,6 +71,16 @@ public:
 
 	UFUNCTION()
 	FVector GetCharLocation();
+
+	UFUNCTION()
+	void InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
+		int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
+		int32 OtherbodyIndex);
+
+	void InteractOnInput();
 
 };
 
