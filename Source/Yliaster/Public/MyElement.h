@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "VVGridActorComponent.h"
 //#include "UObject/NoExportTypes.h"
 #include "MyElement.generated.h"
 
