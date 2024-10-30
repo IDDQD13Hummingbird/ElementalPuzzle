@@ -117,59 +117,77 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 	if (!StartTile->IsAttachedTo(RootComponent) || !EndTile->IsAttachedTo(RootComponent))
 		return Path;
 
+
+	// Each Node Has it's Key(UVVTile*), Sum(Cost + Value) and Parent(UVVTile*) 
 	struct TileNode
 	{
-		int32 TotalTraversed;
-		int32 PathValue;
-	};
-
-	struct TileTree
-	{
+		// The total cost of all tiles traversed
+		int32 TotalCost;
+		// TotalCost + ManhattenDistance
+		int32 Value;
 		UVVTile* Parent;
-		TArray<UVVTile*> Children;
 	};
-	
-	TMap<UVVTile*, UVVTile*> SearchedTiles;
-	TMap<UVVTile*, TileNode> UnsearchedTiles;
-	UVVTile* CurrentTile = nullptr;
-	UnsearchedTiles.Add(StartTile, TileNode(0, ManhattenDistance(StartTile, EndTile)));
+	// Open list, Closed list, Add StartTile
+	TMap<UVVTile*, TileNode> OpenTiles;
+	TMap<UVVTile*, TileNode> ClosedTiles;
 
-	int32 SearchCount = 0;
-	while (SearchCount < Columns * Rows)
+	OpenTiles.Add(StartTile, TileNode(0, ManhattenDistance(StartTile, EndTile), nullptr));
+
+	UVVTile* CurrentTile{ nullptr };
+	TileNode CurrentData{ 0, 0, nullptr };
+
+	// While Open.Size() > 0
+	while (OpenTiles.IsEmpty())
 	{
-		// Get the tile with the lowest cost (TotalTraversed + Manhattan)
-		UnsearchedTiles.ValueSort([](TileNode A, TileNode B) {return A.PathValue < B.PathValue; });
-		TArray<UVVTile*> KeyArray;
-		UnsearchedTiles.GenerateKeyArray(KeyArray);
-		// Add it to Searched, Set as Current and Remove it from Unsearched
-		SearchedTiles.Add(KeyArray[0], CurrentTile);
-		CurrentTile = KeyArray[0];
-		UnsearchedTiles.FindAndRemoveChecked(CurrentTile);
-
-		// If we reached the end tile
-		if (CurrentTile == EndTile)
+		//	Find Open with lowest Sum, Save as variable
+		OpenTiles.ValueSort([](TileNode A, TileNode B) {return A.TotalCost + A.Value < B.TotalCost + B.Value; });
+		for (TPair<UVVTile*, TileNode>& KeyValuePair : OpenTiles)
 		{
-			while (SearchedTiles.Find(CurrentTile))
-			{
-				Path.EmplaceAt(0, CurrentTile);
-				CurrentTile = *SearchedTiles.Find(CurrentTile);
+			CurrentTile = KeyValuePair.Key;
+			CurrentData = *OpenTiles.Find(CurrentTile);
+			break;
+		}
 
+		//	Remove Current from Open
+		OpenTiles.Remove(CurrentTile);
+
+		for (UVVTile* Adjacent : CurrentTile->Adjacents)
+		{
+			if (Adjacent == EndTile)
+			{
+				if (EndTile->TraversalCost >= 0)
+					Path.Emplace(EndTile);
+
+				while (CurrentData.Parent)
+				{
+					Path.EmplaceAt(0, CurrentTile);
+					CurrentTile = CurrentData.Parent;
+				}
 				return Path;
 			}
-		}
-			
-		// Add each traversable tile that is not in Searched to Unsearched
-		for (UVVTile* Neighbor : CurrentTile->Adjacents)
-		{
-			TileNode* CurrentTileValues = UnsearchedTiles.Find(CurrentTile);
-			if (Neighbor && Neighbor->TraversalCost >= 0 && !SearchedTiles.Contains(Neighbor))
-			{
-				int32 TraversedTotal = CurrentTileValues->PathValue + Neighbor->TraversalCost;
-				UnsearchedTiles.Add(Neighbor, TileNode(TraversedTotal, TraversedTotal + CurrentTileValues->PathValue));
-			}
+			if (Adjacent->TraversalCost < 0)
+				continue;
+
+			// Calculate Adjacent Sum
+			int32 AdjacentCost = CurrentData.TotalCost + Adjacent->TraversalCost;
+			int32 AdjacentValue = AdjacentCost + ManhattenDistance(Adjacent, EndTile);
+
+
+			if (OpenTiles.Contains(Adjacent) && AdjacentValue > OpenTiles.Find(Adjacent)->Value)
+				continue;
+			if (ClosedTiles.Contains(Adjacent) && AdjacentValue > ClosedTiles.Find(Adjacent)->Value)
+				continue;
+
+			OpenTiles.Add(Adjacent, TileNode(AdjacentCost, AdjacentValue, CurrentTile));
 		}
 
-		SearchCount++;
+		ClosedTiles.Add(CurrentTile);
+	}
+
+	while (CurrentData.Parent)
+	{
+		Path.EmplaceAt(0, CurrentTile);
+		CurrentTile = CurrentData.Parent;
 	}
 	return Path;
 }
