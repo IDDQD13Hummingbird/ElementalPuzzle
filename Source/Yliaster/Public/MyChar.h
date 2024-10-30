@@ -3,23 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
 #include "InteractionInterface.h"
+#include "MyChar.generated.h"
 
-#include "MyCharacter.generated.h"
+class AVVGrid;
+class UVVTile;
 
 UCLASS()
-class YLIASTER_API AMyCharacter : public AActor
+class YLIASTER_API AMyChar : public ACharacter, public IInteractionInterface
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AMyCharacter();
+
+public:
+	// Sets default values for this character's properties
+	AMyChar();
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,61 +31,71 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
 
 	// COMPONENTS
-	
+
 
 	//Character's Mesh
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
-	//UStaticMeshComponent* CharMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	UStaticMeshComponent* CharMesh;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
-	//UBoxComponent* InteractionBox;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	UBoxComponent* InteractionBox;
 
-	////Character's Root Component
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
-	//UCapsuleComponent* CharRoot;
+	//Character's Root Component
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	UCapsuleComponent* CharRoot;
 
-	//// Target tile for character to move to
-	//UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Component")
-	//UBoxComponent* Target;
-	//// USE GetComponentLocation for tracking target of the character
+	// Target tile for character to move to
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Component")
+	UBoxComponent* Target;
+	// USE GetComponentLocation for tracking target of the character
 
-	//// Reference to inventory component
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	//class UInventoryComponent* InventoryReference;
+	// Reference to inventory component
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	class UInventoryComponent* InventoryReference;
 
-	//IInteractionInterface* Interface = nullptr;
+	IInteractionInterface* Interface = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	AVVGrid* GridReference;
 
-	//// VARIABLES
-
-	//// Base movement speed of the coontrolled character
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
-	//float BaseMoveSpeed = 10.0f;
-
-
-	//// FUNCTIONS
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	UVVTile* TileReference;
 
 
-	////UFUNCTION()
-	////void MoveCharacter();
+	// VARIABLES
 
-	//UFUNCTION()
-	//FVector GetCharLocation();
+	// Base movement speed of the coontrolled character
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
+	float BaseMoveSpeed = 10.0f;
 
-	//UFUNCTION()
-	//void InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
-	//	int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	// FUNCTIONS
+
 
 	//UFUNCTION()
-	//void InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
-	//	int32 OtherbodyIndex);
+	//void MoveCharacter();
 
-	//void InteractOnInput();
+	UFUNCTION()
+	FVector GetCharLocation();
 
-	//UFUNCTION()
-	//void GridDetectionTest(UVVTile* TileReference, int32 X, int32 Y);
+	UFUNCTION()
+	void InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
+		int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
+		int32 OtherbodyIndex);
+
+	void InteractOnInput();
+
+	UFUNCTION()
+	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y);
 
 };
 
@@ -138,4 +150,5 @@ public:
 //                                     ****(((##(((((###((((((((/(((((((((/(///((((////*              
 //                                          .***//((#############((###((((((((/(((///(///             
 //                                                   ,*/(#((############((((#(((#((((((/**            
-//                                                            ,**/((((((((((((((((#(((((((            
+//               
+
