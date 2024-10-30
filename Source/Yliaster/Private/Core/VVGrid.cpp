@@ -38,9 +38,9 @@ void AVVGrid::OnConstruction(const FTransform& Transform)
 	PopulateGrid();
 }
 
-void AVVGrid::OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y)
+void AVVGrid::OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed)
 {
-	TileClickedDelegate.Broadcast(TileClicked, X, Y);
+	TileClickedDelegate.Broadcast(TileClicked, X, Y, ButtonPressed);
 }
 
 int32 AVVGrid::IndexFromCoords(int32 X, int32 Y)
@@ -162,7 +162,7 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 		for (UVVTile* Neighbor : CurrentTile->Adjacents)
 		{
 			TileNode* CurrentTileValues = UnsearchedTiles.Find(CurrentTile);
-			if (Neighbor && Neighbor->TraversalCost != -1 && !SearchedTiles.Contains(Neighbor))
+			if (Neighbor && Neighbor->TraversalCost >= 0 && !SearchedTiles.Contains(Neighbor))
 			{
 				int32 TraversedTotal = CurrentTileValues->PathValue + Neighbor->TraversalCost;
 				UnsearchedTiles.Add(Neighbor, TileNode(TraversedTotal, TraversedTotal + CurrentTileValues->PathValue));

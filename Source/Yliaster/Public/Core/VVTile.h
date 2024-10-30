@@ -7,7 +7,7 @@
 #include "VVTile.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileOnClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FTileOnClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y, FKey, ButtonPressed);
 
 /**
  * 
@@ -46,7 +46,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	int32 YCoordinate;
 
-	// -1 is impassable
+	// Negative values are impassable
 	UPROPERTY(EditAnywhere, Category = "Tile")
 	int32 TraversalCost = 1;
 };

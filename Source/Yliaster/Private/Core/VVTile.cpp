@@ -9,6 +9,9 @@ UVVTile::UVVTile()
 {
 	this->bHiddenInGame = false;
 	this->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	this->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Overlap);
+	this->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
+	this->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	this->Adjacents.SetNum(4);
 }
 
@@ -51,9 +54,9 @@ void UVVTile::OnCursorClicked(UPrimitiveComponent* TouchedComponent, FKey Button
 {
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Emerald, FString::Printf(TEXT("Coordinates are X: %i, Y: %i %i"), XCoordinate, YCoordinate, TileClickDelegate.IsBound()? 1 : 0));
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Emerald, FString::Printf(TEXT("Coordinates are X: %i, Y: %i"), XCoordinate, YCoordinate));
 	}
 
-	TileClickDelegate.Broadcast(this, XCoordinate, YCoordinate);
+	TileClickDelegate.Broadcast(this, XCoordinate, YCoordinate, ButtonPressed);
 }
 

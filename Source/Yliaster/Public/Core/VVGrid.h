@@ -8,7 +8,7 @@
 
 class UVVTile;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FTileClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FTileClickedSignature, UVVTile*, TileClicked, int32, X, int32, Y, FKey, ButtonPressed);
 
 USTRUCT()
 struct FIntCoord
@@ -54,7 +54,7 @@ public:
 	FTileClickedSignature TileClickedDelegate;
 
 	UFUNCTION()
-	void OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y);
+	void OnTileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey TilePressed);
 
 	UFUNCTION()
 	int32 IndexFromCoords(int32 X, int32 Y);
