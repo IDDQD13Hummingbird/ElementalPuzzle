@@ -137,7 +137,7 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 	TileNode CurrentData{ 0, 0, nullptr };
 
 	// While Open.Size() > 0
-	while (OpenTiles.IsEmpty())
+	while (!OpenTiles.IsEmpty())
 	{
 		//	Find Open with lowest Sum, Save as variable
 		OpenTiles.ValueSort([](TileNode A, TileNode B) {return A.TotalCost + A.Value < B.TotalCost + B.Value; });
@@ -153,8 +153,10 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 			while (CurrentData.Parent)
 			{
 				Path.EmplaceAt(0, CurrentTile);
-				CurrentTile = CurrentData.Parent;
-				CurrentData = *ClosedTiles.Find(CurrentTile);
+
+				UVVTile* CurrentParent = CurrentData.Parent;
+				CurrentTile = CurrentParent;
+				CurrentData = *ClosedTiles.Find(CurrentParent);
 			}
 			return Path;
 		}
@@ -164,7 +166,7 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 
 		for (UVVTile* Adjacent : CurrentTile->Adjacents)
 		{
-			if (Adjacent->TraversalCost < 0)
+			if (!Adjacent || Adjacent->TraversalCost < 0)
 				continue;
 
 			// Calculate Adjacent Sum
@@ -180,13 +182,16 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 			OpenTiles.Add(Adjacent, TileNode(AdjacentCost, AdjacentValue, CurrentTile));
 		}
 
-		ClosedTiles.Add(CurrentTile);
+		ClosedTiles.Add(CurrentTile, CurrentData);
 	}
 
 	while (CurrentData.Parent)
 	{
 		Path.EmplaceAt(0, CurrentTile);
-		CurrentTile = CurrentData.Parent;
+
+		UVVTile* CurrentParent = CurrentData.Parent;
+		CurrentTile = CurrentParent;
+		CurrentData = *ClosedTiles.Find(CurrentParent);
 	}
 	return Path;
 }
