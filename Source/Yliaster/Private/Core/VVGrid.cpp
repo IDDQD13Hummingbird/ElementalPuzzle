@@ -148,23 +148,22 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 			break;
 		}
 
+		if (CurrentTile == EndTile)
+		{
+			while (CurrentData.Parent)
+			{
+				Path.EmplaceAt(0, CurrentTile);
+				CurrentTile = CurrentData.Parent;
+				CurrentData = *ClosedTiles.Find(CurrentTile);
+			}
+			return Path;
+		}
+
 		//	Remove Current from Open
 		OpenTiles.Remove(CurrentTile);
 
 		for (UVVTile* Adjacent : CurrentTile->Adjacents)
 		{
-			if (Adjacent == EndTile)
-			{
-				if (EndTile->TraversalCost >= 0)
-					Path.Emplace(EndTile);
-
-				while (CurrentData.Parent)
-				{
-					Path.EmplaceAt(0, CurrentTile);
-					CurrentTile = CurrentData.Parent;
-				}
-				return Path;
-			}
 			if (Adjacent->TraversalCost < 0)
 				continue;
 
