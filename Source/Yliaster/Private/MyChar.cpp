@@ -39,12 +39,20 @@ void AMyChar::BeginPlay()
 	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &AMyChar::InteractOnOverlap);
 	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &AMyChar::InteractEnd);
 
+	
+
 }
 
 // Called every frame
 void AMyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (CurrentDistance < TotalDistance) {
+		FVector Location = GetActorLocation();
+		Location += Direction * BaseMoveSpeed * DeltaTime;
+		SetActorLocation(Location);
+		CurrentDistance = (Location - StartLocation).Size();
+	}
 
 }
 
@@ -89,7 +97,24 @@ void AMyChar::InteractOnInput()
 
 void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y)
 {
+	
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Grid Detected"));
+	StartLocation = GetActorLocation();
+	Direction = FetchedTileReference->GetComponentLocation() - StartLocation;
+	TotalDistance = Direction.Size();
+
+	Direction = Direction.GetSafeNormal();
+	CurrentDistance = 0.0f;
+
+	/*if (FetchedTileReference) {
+		if (CurrentDistance < TotalDistance) {
+			FVector Location = GetActorLocation();
+			Location += Direction * BaseMoveSpeed;
+			SetActorLocation(Location);
+			CurrentDistance = (Location - StartLocation).Size();
+		}
+	}*/
+	
 
 }
 
