@@ -72,7 +72,12 @@ public:
 
 	// Base movement speed of the coontrolled character
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
-	float BaseMoveSpeed = 10.0f;
+	float BaseMoveSpeed = 150.0f;
+
+	FVector Direction;
+	FVector StartLocation;
+	float TotalDistance;
+	float CurrentDistance;
 
 
 	// FUNCTIONS
