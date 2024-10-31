@@ -2,6 +2,7 @@
 
 
 #include "InventoryComponent.h"
+#include "MyElement.h"
 
 
 // Sets default values for this component's properties
@@ -34,14 +35,14 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-bool UInventoryComponent::AddItem(UItem* Item)
+bool UInventoryComponent::AddItem(AMyElement* Item)
 {
 	InventoryStack.Push(Item);
 	// WHY CAN I NOT PUSH THE ITEM INTO THE STACK?????? :(
 	return false;
 }
 
-bool UInventoryComponent::RemoveItem(UItem* Item)
+bool UInventoryComponent::RemoveItem(AMyElement* Item)
 {
 	InventoryStack.Pop();
 	return false;
