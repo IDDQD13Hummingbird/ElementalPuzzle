@@ -30,8 +30,8 @@ public:
 
 	// COMPONENTS
 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	stack<UItem*> InventoryStack;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	TArray<UItem*> InventoryStack;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
@@ -42,6 +42,8 @@ public:
 
 	bool AddItem(UItem* Item);
 	bool RemoveItem(UItem* Item);
+
+
 
 
 };
