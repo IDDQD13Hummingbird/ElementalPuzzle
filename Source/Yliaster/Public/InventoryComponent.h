@@ -7,7 +7,6 @@ using namespace std;
 #include "Components/ActorComponent.h"
 #include "stack"
 #include "MyElement.h"
-//#include "Item.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -32,6 +31,7 @@ public:
 	// COMPONENTS
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	TArray<AMyElement*> InventoryStack;
@@ -39,6 +39,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	TArray<UItem*> InventoryStack;
 >>>>>>> fbe3984 (Fixed syntax)
+=======
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	TArray<AMyElement*> InventoryStack;
+>>>>>>> fb142f1 (Updated MyChar to comply with new Tile delegate)
 
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
