@@ -100,7 +100,7 @@ public:
 	void InteractOnInput();
 
 	UFUNCTION()
-	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y);
+	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed);
 
 };
 

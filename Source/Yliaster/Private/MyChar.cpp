@@ -95,7 +95,7 @@ void AMyChar::InteractOnInput()
 	}
 }
 
-void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y)
+void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed)
 {
 	
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Grid Detected"));

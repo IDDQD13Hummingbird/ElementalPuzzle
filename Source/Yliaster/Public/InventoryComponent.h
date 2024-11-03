@@ -7,7 +7,6 @@ using namespace std;
 #include "Components/ActorComponent.h"
 #include "stack"
 #include "MyElement.h"
-//#include "Item.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -31,13 +30,8 @@ public:
 
 	// COMPONENTS
 
-<<<<<<< Updated upstream
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	stack<UItem*> InventoryStack;
-=======
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	TArray<AMyElement*> InventoryStack;
->>>>>>> Stashed changes
 
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
