@@ -14,14 +14,16 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTileObjectClickedSignature, FKey, B
 /**
  * 
  */
-UCLASS()
+UCLASS(meta = (BlueprintSpawnableComponent))
 class YLIASTER_API UVVGridActorComponent : public UBoxComponent
 {
 	GENERATED_BODY()
 	
 protected:
+	UVVGridActorComponent();
+
 	UPROPERTY(EditAnywhere, Category = "Grid")
-	int32 CostModifier = 0;
+	int32 CostModifier;
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -32,8 +34,18 @@ protected:
 	UFUNCTION()
 	void TileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed);
 
+	UFUNCTION()
+	void ModifyTile(UVVTile* TargetTile);
+
+	UFUNCTION()
+	void RevertTile(UVVTile* TargetTile);
+
+
 public:
 	virtual void BeginPlay() override;
 
 	FTileObjectClickedSignature ObjectClickedDelegate;
+
+	UFUNCTION(BlueprintCallable, Category = "Grid")
+	void SetCost(int32 NewCost);
 };
