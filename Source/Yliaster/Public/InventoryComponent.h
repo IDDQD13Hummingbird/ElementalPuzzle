@@ -30,19 +30,8 @@ public:
 
 	// COMPONENTS
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	TArray<AMyElement*> InventoryStack;
-=======
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	TArray<UItem*> InventoryStack;
->>>>>>> fbe3984 (Fixed syntax)
-=======
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	TArray<AMyElement*> InventoryStack;
->>>>>>> fb142f1 (Updated MyChar to comply with new Tile delegate)
 
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
@@ -53,8 +42,6 @@ public:
 
 	bool AddItem(AMyElement* Item);
 	bool RemoveItem(AMyElement* Item);
-
-
 
 
 };

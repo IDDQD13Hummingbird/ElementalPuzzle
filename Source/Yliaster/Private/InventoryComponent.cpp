@@ -44,11 +44,7 @@ bool UInventoryComponent::AddItem(AMyElement* Item)
 
 bool UInventoryComponent::RemoveItem(AMyElement* Item)
 {
-<<<<<<< HEAD
-//	InventoryStack.pop();
-=======
 	InventoryStack.Pop();
->>>>>>> fbe3984 (Fixed syntax)
 	return false;
 }
 
