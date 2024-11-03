@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "InteractionInterface.h"
 #include "MyObstacle.h"
+
 
 // Sets default values
 AMyObstacle::AMyObstacle()
@@ -25,3 +27,8 @@ void AMyObstacle::Tick(float DeltaTime)
 
 }
 
+//void AMyObstacle::InteractWithThis()
+//{
+//	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("InteractWithThis"));
+//
+//}  -- For some reason, Unreal treats InteractWithThis() as undeclared.

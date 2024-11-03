@@ -3,6 +3,7 @@
 
 #include "InventoryComponent.h"
 #include "MyElement.h"
+#include "InteractionInterface.h"
 
 
 // Sets default values for this component's properties
@@ -25,6 +26,18 @@ void UInventoryComponent::BeginPlay()
 	// ...
 	
 }
+
+
+//void UInventoryComponent::InputInteract()
+//{
+//	if (Interface)
+//	{
+//		Interface->InteractWithThis();
+//	}
+//
+//	// ...
+//
+//}  //-- Ask Edvard how to code Interface in correctly.
 
 
 // Called every frame

@@ -37,7 +37,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly,c )
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	TSubclassOf<class IInteractionInterface>  Interface;
 	// FUNCTIONS
 
 
