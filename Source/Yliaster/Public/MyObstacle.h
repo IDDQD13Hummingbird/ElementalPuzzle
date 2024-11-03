@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MyElement.h"
+#include "InteractionInterface.h"
 #include "MyObstacle.generated.h"
 
 UCLASS()
-class YLIASTER_API AMyObstacle : public AActor
+class YLIASTER_API AMyObstacle : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
