@@ -31,13 +31,9 @@ public:
 
 	// COMPONENTS
 
-<<<<<<< Updated upstream
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	stack<UItem*> InventoryStack;
-=======
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	TArray<AMyElement*> InventoryStack;
->>>>>>> Stashed changes
 
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
