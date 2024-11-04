@@ -28,7 +28,7 @@ void UInventoryComponent::BeginPlay()
 }
 
 
-//void UInventoryComponent::InputInteract()
+//void UInventoryComponent::InputInteract()  // -- We need input controller first.
 //{
 //	if (Interface)
 //	{
@@ -37,7 +37,7 @@ void UInventoryComponent::BeginPlay()
 //
 //	// ...
 //
-//}  //-- Ask Edvard how to code Interface in correctly.
+//}  //-- Remember to add OnOverlap to Obstacle so that it can assign pointer *actually, better do that with the character... 
 
 
 // Called every frame

@@ -27,8 +27,8 @@ void AMyObstacle::Tick(float DeltaTime)
 
 }
 
-//void AMyObstacle::InteractWithThis()
-//{
-//	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("InteractWithThis"));
-//
-//}  -- For some reason, Unreal treats InteractWithThis() as undeclared.
+void AMyObstacle::InteractWithThis()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("InteractWithThis"));
+
+}  

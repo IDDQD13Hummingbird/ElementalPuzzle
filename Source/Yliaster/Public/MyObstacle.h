@@ -27,6 +27,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
 	FString RequiredElement;
 
-//	UFUNCTION()
-//	void ElementInteract(AMyElement* OtherActor);
+	virtual void InteractWithThis();
+
+    IInteractionInterface* Interface = nullptr;
 };

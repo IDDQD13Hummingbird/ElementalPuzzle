@@ -8,6 +8,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "InventoryComponent.h"
+
 #include "InteractionInterface.h"
 #include "MyChar.generated.h"
 
