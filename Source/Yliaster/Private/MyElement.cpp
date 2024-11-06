@@ -15,14 +15,6 @@ AMyElement::AMyElement()
 void AMyElement::BeginPlay()
 {
 	Super::BeginPlay();
-
-
-
-	AMyElement Fire;
-	Fire.ElementType = "Fire";
-
-	AMyElement Water;
-	Water.ElementType = "Water";
 	
 }
 

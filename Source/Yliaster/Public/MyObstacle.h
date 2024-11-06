@@ -25,7 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
-	FString RequiredElement;
+	ElementType RequiredElement;
 
 	virtual void InteractWithThis();
 

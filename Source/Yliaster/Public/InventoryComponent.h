@@ -32,7 +32,7 @@ public:
 	// COMPONENTS
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	TArray<AMyElement*> InventoryStack;
+	TArray<ElementType> InventoryStack;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;

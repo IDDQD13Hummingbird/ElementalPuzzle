@@ -9,6 +9,15 @@
 //#include "UObject/NoExportTypes.h"
 #include "MyElement.generated.h"
 
+const int FIRE = 0;
+const int WATER = 1;
+
+UENUM(BlueprintType)
+enum class ElementType : uint8 {
+	FIRE = 0 UMETA(DisplayName = "FIRE"),
+    WATER = 1  UMETA(DisplayName = "WATER")
+};
+
 UCLASS()
 class YLIASTER_API AMyElement : public AActor
 {
@@ -34,9 +43,10 @@ public:
 	UPROPERTY()
 	class UInventoryComponent* InventoryReference;
 	virtual void Tick(float DeltaTime) override;
-	// Called every frame
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
-	FString ElementType;
+	// Called every frame, 
+
+
+	//FString ElementType;
 	//I wanted to use "Char", but Ureal was not on board with this decision.
 	//Element type will be coded as "F" - fire, "W" - water, "A" - air, "E" - earth.
 	//It is possible to go with "M" - metal, "I" - ice, "P" - plant, "L" - lighting
