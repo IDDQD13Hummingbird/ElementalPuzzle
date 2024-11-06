@@ -42,8 +42,8 @@ public:
 	// FUNCTIONS
 
 
-	bool AddItem(AMyElement* Item);
-	bool RemoveItem(AMyElement* Item);
+	bool AddItem(ElementType Item);
+	bool RemoveItem(ElementType Item);
 
 
 };
