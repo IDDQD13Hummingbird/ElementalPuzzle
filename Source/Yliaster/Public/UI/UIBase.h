@@ -43,7 +43,7 @@ public:
 	UVVElementIcon* AddElement(int32 ElementIndex);
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	void RemoveElement();
+	int32 RemoveElement();
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ReplaceElement(int32 ElementIndex);

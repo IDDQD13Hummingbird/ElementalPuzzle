@@ -25,15 +25,20 @@ UVVElementIcon* UUIBase::AddElement(int32 ElementIndex)
 
 	UVVElementIcon* NewElement = CreateWidget<UVVElementIcon>(this, ElementDisplayClass);
 	NewElement->SetVisual(ElementVisuals[ElementIndex]);
+	NewElement->ElementIndex = ElementIndex;
 	ActiveSlot->SetContent(NewElement);
 
     return NewElement;
 }
 
-void UUIBase::RemoveElement()
+int32 UUIBase::RemoveElement()
 {
 	if (!ActiveSlot->GetContent())
-		return;
+		return -1;
+
+	UVVElementIcon* RemovedElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
+	int32 RemovedElementIndex = RemovedElement->ElementIndex;
+
 
 	int32 ElementCount = InventorySlot->GetChildrenCount();
 	if (ElementCount > 1)
@@ -44,6 +49,8 @@ void UUIBase::RemoveElement()
 	{
 		ActiveSlot->SetContent(nullptr);
 	}
+
+	return RemovedElementIndex;
 }
 
 void UUIBase::ReplaceElement(int32 ElementIndex)

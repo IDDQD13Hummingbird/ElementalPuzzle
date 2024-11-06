@@ -22,5 +22,8 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void SetVisual(UTexture2D* NewImage);
+
+	UPROPERTY(EditAnywhere, Category = "Element")
+	int32 ElementIndex;
 	
 };
