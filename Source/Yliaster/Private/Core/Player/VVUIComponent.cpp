@@ -22,18 +22,37 @@ void UVVUIComponent::BeginPlay()
 
 	if (!CurrentPlayer)
 	{
-		CurrentPlayer = GetOwner<APawn>()->GetController<APlayerController>();
+		CurrentPlayer = GetWorld()->GetFirstPlayerController();
 	}
 
-	// ...
-	if (UIClass)
+	if (!UIBase)
 	{
 		UIBase = CreateWidget<UUIBase>(CurrentPlayer, UIClass);
 		if (UIBase)
 			UIBase->AddToViewport();
 	}
+
+	GetOwner<APawn>()->ReceiveControllerChangedDelegate.AddDynamic(this, &UVVUIComponent::AssignController);
+
+	
+	// ...
+
 }
 
+
+void UVVUIComponent::AssignController(APawn* Pawn, AController* OldController, AController* NewController)
+{
+	if (APlayerController* NewPlayerController = Cast<APlayerController>(NewController))
+	{
+		CurrentPlayer = NewPlayerController;
+		if (!UIBase)
+		{
+			UIBase = CreateWidget<UUIBase>(CurrentPlayer, UIClass);
+			if (UIBase)
+				UIBase->AddToViewport();
+		}
+	}
+}
 
 // Called every frame
 void UVVUIComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
