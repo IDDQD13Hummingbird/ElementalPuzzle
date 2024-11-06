@@ -54,6 +54,21 @@ void AMyChar::Tick(float DeltaTime)
 		CurrentDistance = (Location - StartLocation).Size();
 	}
 
+	if (!TargetTile.IsEmpty())
+	{
+		// How far the character has moved from the previous tile towards the next target tile
+		// 0 = just set off, 1 = Reached the target
+		MovementDelta += DeltaTime * BaseMoveSpeed;
+		SetActorLocation(FMath::Lerp(CurrentTile->GetComponentLocation(), TargetTile[0]->GetComponentLocation(), MovementDelta));
+
+		// If we've reached the target tile we move on to the next
+		if (MovementDelta >= 1)
+		{
+			MovementDelta = 0;
+			CurrentTile = TargetTile[0];
+			TargetTile.RemoveAt(0);
+		}
+	}
 }
 
 FVector AMyChar::GetCharLocation()
@@ -64,7 +79,7 @@ FVector AMyChar::GetCharLocation()
 
 void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlapping"));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlapping"));
 	Interface = Cast<IInteractionInterface>(OtherActor);
 	if (!GridReference) {
 		GridReference = Cast<AVVGrid>(OtherActor);
@@ -72,6 +87,12 @@ void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called"));
 			GridReference->TileClickedDelegate.AddDynamic(this, &AMyChar::GridDetectionTest);
 		}
+	}
+
+	if (!CurrentTile)
+	{
+		if (UVVTile* TileReference = Cast<UVVTile>(OtherComponent))
+			CurrentTile = TileReference;
 	}
 	
 	/*TileReference = Cast<UVVTile>(OtherComponent);
@@ -105,6 +126,8 @@ void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y,
 
 	Direction = Direction.GetSafeNormal();
 	CurrentDistance = 0.0f;
+
+	TargetTile.Append(GridReference->FindPath(CurrentTile, FetchedTileReference));
 
 	/*if (FetchedTileReference) {
 		if (CurrentDistance < TotalDistance) {
