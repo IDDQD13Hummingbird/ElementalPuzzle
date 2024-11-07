@@ -25,4 +25,5 @@ public:
 
 	virtual void InteractWithThis();
 
+	IInteractionInterface* Interact = nullptr;
 };
