@@ -74,6 +74,13 @@ public:
 	TArray<UVVTile*> TargetTile;
 
 
+	// Input and IMC
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputAction* InteractAction;
+
+
 	// VARIABLES
 
 	// Base movement speed of the coontrolled character

@@ -118,7 +118,16 @@ void AMyChar::InteractOnInput()
 
 void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed)
 {
-	
+	if (!TargetTile.IsEmpty())
+	{
+		UVVTile* TileA = CurrentTile;
+		UVVTile* TileB = TargetTile[0];
+
+		TargetTile.Empty();
+		CurrentTile = TileB;
+		TargetTile.Add(TileA);
+		MovementDelta = 1 - MovementDelta;
+	}
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Grid Detected"));
 	StartLocation = GetActorLocation();
 	Direction = FetchedTileReference->GetComponentLocation() - StartLocation;
@@ -144,7 +153,13 @@ void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y,
 // Called to bind functionality to input
 void AMyChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	//Super::SetupPlayerInputComponent(PlayerInputComponent);
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+
+	if (EnhancedInputComponent)
+	{
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMyArcher::InputInteract);
+	}
 
 }
 
