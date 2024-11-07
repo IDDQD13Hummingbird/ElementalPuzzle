@@ -7,6 +7,7 @@
 //#include "Core/VVGridActorComponent.h"
 
 //#include "UObject/NoExportTypes.h"
+#include "IInteractionInterface.h"
 #include "MyElement.generated.h"
 
 const int FIRE = 0;
@@ -17,6 +18,7 @@ enum class ElementType : uint8 {
 	FIRE = 0 UMETA(DisplayName = "FIRE"),
     WATER = 1  UMETA(DisplayName = "WATER")
 };
+class UInventoryComponent;
 
 UCLASS()
 class YLIASTER_API AMyElement : public AActor
@@ -40,6 +42,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UStaticMeshComponent* ItemMesh;
 
+	UInventoryComponent* OtherInventoryRef;
+
 	UPROPERTY()
 	class UInventoryComponent* InventoryReference;
 	virtual void Tick(float DeltaTime) override;
@@ -50,6 +54,8 @@ public:
 	//I wanted to use "Char", but Ureal was not on board with this decision.
 	//Element type will be coded as "F" - fire, "W" - water, "A" - air, "E" - earth.
 	//It is possible to go with "M" - metal, "I" - ice, "P" - plant, "L" - lighting
+
+	virtual void InteractWithThis();
 
 
 };

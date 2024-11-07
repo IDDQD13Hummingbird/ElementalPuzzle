@@ -66,15 +66,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	AVVGrid* GridReference;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	UVVTile* TileReference;
+	UPROPERTY()
+	float MovementDelta;
+
+	UPROPERTY()
+	UVVTile* CurrentTile;
+
+	UPROPERTY()
+	TArray<UVVTile*> TargetTile;
 
 
 	// VARIABLES
 
 	// Base movement speed of the coontrolled character
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
-	float BaseMoveSpeed = 150.0f;
+	float BaseMoveSpeed = 5.0f;
 
 	FVector Direction;
 	FVector StartLocation;

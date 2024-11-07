@@ -2,7 +2,7 @@
 
 
 #include "MyElement.h"
-
+#include "InventoryComponent.h"
 // Sets default values
 AMyElement::AMyElement()
 {
@@ -23,5 +23,11 @@ void AMyElement::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AMyElement::InteractWithThis()
+{
+	//OtherInventoryRef->AddItem(this);
+	Destroy();
 }
 

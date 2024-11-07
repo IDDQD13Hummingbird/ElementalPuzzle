@@ -31,6 +31,9 @@ protected:
 	UPROPERTY()
 	APlayerController* CurrentPlayer;
 
+	UFUNCTION()
+	void AssignController(APawn* Pawn, AController* OldController, AController* NewController);
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
