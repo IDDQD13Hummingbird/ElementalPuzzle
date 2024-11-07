@@ -104,7 +104,7 @@ void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 
 void AMyChar::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping"));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping"));
 	Interface = nullptr;
 }
 
