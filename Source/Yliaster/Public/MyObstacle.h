@@ -4,9 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MyElement.h"
+#include "EnumComponent.h"
 #include "InteractionInterface.h"
+#include "InventoryComponent.h"
 #include "MyObstacle.generated.h"
+
+class UInventoryComponent;
+
 
 UCLASS()
 class YLIASTER_API AMyObstacle : public AActor, public IInteractionInterface
@@ -27,7 +31,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
 	ElementType RequiredElement;
 
-	virtual void InteractWithThis();
+	//virtual void InteractWithThis();
 
     IInteractionInterface* Interface = nullptr;
 };

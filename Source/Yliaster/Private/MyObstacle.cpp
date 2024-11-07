@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MyObstacle.h"
+#include "EnumComponent.h"
 #include "InteractionInterface.h"
 
 #pragma once
@@ -30,8 +31,13 @@ void AMyObstacle::Tick(float DeltaTime)
 
 }
 
-void AMyObstacle::InteractWithThis()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("InteractWithThis"));
-
-}  
+//void AMyObstacle::InteractWithThis()
+//{
+//	bool check = GetInventoryReference() == RequiredElement;
+//	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("InteractWithThis"));
+//	if (check = true) {
+//		InventoryReference.Pop();
+//		Destroy;
+//	};
+//
+//}  

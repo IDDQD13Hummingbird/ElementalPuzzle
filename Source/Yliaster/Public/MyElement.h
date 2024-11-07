@@ -5,19 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 //#include "Core/VVGridActorComponent.h"
-
+#include "EnumComponent.h"
 //#include "UObject/NoExportTypes.h"
-#include "IInteractionInterface.h"
+#include "InteractionInterface.h"
 #include "MyElement.generated.h"
 
-const int FIRE = 0;
-const int WATER = 1;
 
-UENUM(BlueprintType)
-enum class ElementType : uint8 {
-	FIRE = 0 UMETA(DisplayName = "FIRE"),
-    WATER = 1  UMETA(DisplayName = "WATER")
-};
 class UInventoryComponent;
 
 UCLASS()
@@ -56,6 +49,8 @@ public:
 	//It is possible to go with "M" - metal, "I" - ice, "P" - plant, "L" - lighting
 
 	virtual void InteractWithThis();
+    
+	
 
 
 };

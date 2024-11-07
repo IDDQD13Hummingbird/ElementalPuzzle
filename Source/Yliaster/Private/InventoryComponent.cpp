@@ -3,6 +3,7 @@
 
 #include "InventoryComponent.h"
 #include "MyElement.h"
+#include "EnumComponent.h"
 #include "InteractionInterface.h"
 
 
@@ -59,5 +60,12 @@ bool UInventoryComponent::RemoveItem(ElementType Item)
 {
 	InventoryStack.Pop();
 	return false;
+}
+
+
+
+ElementType UInventoryComponent::GetInventoryReference()
+{
+	return InventoryStack.Last();
 }
 

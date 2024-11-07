@@ -81,12 +81,14 @@ FVector AMyChar::GetCharLocation()
 void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlapping"));
-	Interface = Cast<IInteractionInterface>(OtherActor);
-	if (!GridReference) {
-		GridReference = Cast<AVVGrid>(OtherActor);
-		if (GridReference) {
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called"));
-			GridReference->TileClickedDelegate.AddDynamic(this, &AMyChar::GridDetectionTest);
+	
+		Interface = Cast<IInteractionInterface>(OtherActor);
+
+  if (!GridReference) {
+  	GridReference = Cast<AVVGrid>(OtherActor);
+  	if (GridReference) {
+  		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called"));
+  		GridReference->TileClickedDelegate.AddDynamic(this, &AMyChar::GridDetectionTest);
 		}
 	}
 

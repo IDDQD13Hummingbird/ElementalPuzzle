@@ -41,6 +41,12 @@ public:
 	TSubclassOf<class IInteractionInterface>  Interface;
 	// FUNCTIONS
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	ElementType InventoryReference;
+
+	UFUNCTION(BlueprintCallable, Category = "Component")
+	ElementType GetInventoryReference();
+
 
 	bool AddItem(ElementType Item);
 	bool RemoveItem(ElementType Item);
