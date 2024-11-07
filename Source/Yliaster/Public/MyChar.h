@@ -80,6 +80,9 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputMappingContext* IMC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* InteractAction;
 
 
@@ -116,6 +119,8 @@ public:
 
 	UFUNCTION()
 	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed);
+
+
 
 };
 

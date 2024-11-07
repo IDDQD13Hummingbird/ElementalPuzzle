@@ -3,6 +3,9 @@
 #pragma once
 
 #include "MyChar.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputAction.h"
 #include "InventoryComponent.h"
 #include "Core/VVGrid.h"
 #include "Core/VVTile.h"
@@ -36,6 +39,15 @@ AMyChar::AMyChar()
 void AMyChar::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Adding the Input Mapping Context
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(IMC, 0);
+		}
+	}
 	
 	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &AMyChar::InteractOnOverlap);
 	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &AMyChar::InteractEnd);
@@ -80,8 +92,11 @@ FVector AMyChar::GetCharLocation()
 
 void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlapping"));
+	
 	Interface = Cast<IInteractionInterface>(OtherActor);
+	if (Interface) {
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlaps with item"));
+	}
 	if (!GridReference) {
 		GridReference = Cast<AVVGrid>(OtherActor);
 		if (GridReference) {
@@ -105,8 +120,11 @@ void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 
 void AMyChar::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping"));
-	Interface = nullptr;
+	Interface = Cast<IInteractionInterface>(OtherActor);
+	if (Interface) {
+		Interface = nullptr;
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping with item"));
+	}
 }
 
 void AMyChar::InteractOnInput()
@@ -159,7 +177,7 @@ void AMyChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	if (EnhancedInputComponent)
 	{
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMyArcher::InputInteract);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMyChar::InteractOnInput);
 	}
 
 }

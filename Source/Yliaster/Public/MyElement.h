@@ -5,9 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 //#include "Core/VVGridActorComponent.h"
+#include "Components/BoxComponent.h"
 
 //#include "UObject/NoExportTypes.h"
-#include "IInteractionInterface.h"
+#include "InteractionInterface.h"
 #include "MyElement.generated.h"
 
 const int FIRE = 0;
@@ -38,14 +39,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid")
 	int32 CostModifier = 1;
 
+	
+	// COMPONENTS
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UStaticMeshComponent* ItemMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	UBoxComponent* CollisionBox;
 
 	UInventoryComponent* OtherInventoryRef;
 
 	UPROPERTY()
 	class UInventoryComponent* InventoryReference;
+
+
+	// FUNCTIONS
+
+
 	virtual void Tick(float DeltaTime) override;
 	// Called every frame, 
 
