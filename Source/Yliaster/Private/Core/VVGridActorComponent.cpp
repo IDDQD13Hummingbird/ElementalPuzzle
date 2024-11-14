@@ -2,28 +2,59 @@
 
 
 #include "Core/VVGridActorComponent.h"
+#include "Core/VVGrid.h"
 #include "Core/VVTile.h"
 
 UVVGridActorComponent::UVVGridActorComponent()
 {
 	CostModifier = 0;
+	bShouldInteract = false;
+	CurrentGrid = nullptr;
+	InteractingPlayer = nullptr;
 }
 
 void UVVGridActorComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (UVVTile* OverlappedTile = Cast<UVVTile>(OtherComp))
 		ModifyTile(OverlappedTile);
+
+	if (AVVGrid* NewGrid = Cast<AVVGrid>(OtherActor))
+	{
+		if (NewGrid != CurrentGrid)
+		{
+			CurrentGrid = NewGrid;
+		}
+	}
+
+	if (bShouldInteract)
+	{
+		ShouldInteractDelegate.ExecuteIfBound();
+		bShouldInteract = false;
+	}
+
+	InteractingPlayer = OtherActor;
 }
 
 void UVVGridActorComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (UVVTile* OverlappedTile = Cast<UVVTile>(OtherComp))
 		RevertTile(OverlappedTile);
+
+	InteractingPlayer = nullptr;
 }
 
 void UVVGridActorComponent::TileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed)
 {
 	ObjectClickedDelegate.Broadcast(ButtonPressed);
+
+	if (InteractingPlayer)
+	{
+		ShouldInteractDelegate.ExecuteIfBound();
+	}
+	else
+	{
+		bShouldInteract = true;
+	}
 }
 
 void UVVGridActorComponent::ModifyTile(UVVTile* TargetTile)
@@ -61,6 +92,20 @@ void UVVGridActorComponent::BeginPlay()
 	{
 		if (UVVTile* TileComponent = Cast<UVVTile>(Component))
 			ModifyTile(TileComponent);
+	}
+	
+	if (!CurrentGrid)
+	{
+		TArray<AActor*> OverlappedActors;
+		GetOverlappingActors(OverlappedActors, TSubclassOf<AVVGrid>());
+		for (AActor* ActorN : OverlappedActors)
+		{
+			if (AVVGrid* NewGrid = Cast<AVVGrid>(ActorN))
+			{
+				CurrentGrid = NewGrid;
+				break;
+			}
+		}
 	}
 }
 
