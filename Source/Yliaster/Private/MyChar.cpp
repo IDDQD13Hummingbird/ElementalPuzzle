@@ -9,6 +9,7 @@
 #include "InventoryComponent.h"
 #include "Core/VVGrid.h"
 #include "Core/VVTile.h"
+#include <Kismet/KismetSystemLibrary.h>
 
 // Sets default values
 AMyChar::AMyChar()
@@ -49,10 +50,11 @@ void AMyChar::BeginPlay()
 		}
 	}
 	
+	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &AMyChar::CheckGrid);
 	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &AMyChar::InteractOnOverlap);
 	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &AMyChar::InteractEnd);
 
-	
+	Interface = nullptr;
 
 }
 
@@ -90,13 +92,8 @@ FVector AMyChar::GetCharLocation()
 	return FVector();
 }
 
-void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AMyChar::CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
-	Interface = Cast<IInteractionInterface>(OtherActor);
-	if (Interface) {
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlaps with item"));
-	}
 	if (!GridReference) {
 		GridReference = Cast<AVVGrid>(OtherActor);
 		if (GridReference) {
@@ -118,21 +115,42 @@ void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	}*/
 }
 
-void AMyChar::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex)
+void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Interface = Cast<IInteractionInterface>(OtherActor);
 	if (Interface) {
-		Interface = nullptr;
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlaps with item"));
+		//Interface->InteractWithThis();
+	}
+}
+
+void AMyChar::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex)
+{
+	if (Cast<AMyElement>(OtherActor)) {
+		//Interface = nullptr;
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping with item"));
 	}
+	
+	
+	/*Interface = Cast<IInteractionInterface>(OtherActor);
+	if (Interface) {
+		Interface = nullptr;
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping with item"));
+	}*/
 }
 
 void AMyChar::InteractOnInput()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("interact action pressed"));
 	if (Interface)
 	{
 		Interface->InteractWithThis(); //calls the function of the same name in the object it interacts with
 	}
+}
+
+void AMyChar::TestInput()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("interact action pressed"));
 }
 
 void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed)
@@ -178,6 +196,7 @@ void AMyChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	if (EnhancedInputComponent)
 	{
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMyChar::InteractOnInput);
+		EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &AMyChar::TestInput);
 	}
 
 }

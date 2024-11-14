@@ -17,7 +17,7 @@ class AVVGrid;
 class UVVTile;
 
 UCLASS()
-class YLIASTER_API AMyChar : public ACharacter, public IInteractionInterface
+class YLIASTER_API AMyChar : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -61,7 +61,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	class UInventoryComponent* InventoryReference;
 
-	IInteractionInterface* Interface = nullptr;
+	IInteractionInterface* Interface;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	AVVGrid* GridReference;
@@ -84,6 +85,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputAction* TestAction;
 
 
 	// VARIABLES
@@ -108,6 +112,10 @@ public:
 	FVector GetCharLocation();
 
 	UFUNCTION()
+	void CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
+		int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
 	void InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 		int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -116,6 +124,8 @@ public:
 		int32 OtherbodyIndex);
 
 	void InteractOnInput();
+
+	void TestInput();
 
 	UFUNCTION()
 	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed);

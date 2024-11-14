@@ -12,7 +12,7 @@ using namespace std;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class YLIASTER_API UInventoryComponent : public UActorComponent, public IInteractionInterface
+class YLIASTER_API UInventoryComponent : public UActorComponent//, public IInteractionInterface
 {
 	GENERATED_BODY()
 
@@ -37,8 +37,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	TSubclassOf<class IInteractionInterface>  Interface;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	//TSubclassOf<class IInteractionInterface>  Interface;
 	// FUNCTIONS
 
 

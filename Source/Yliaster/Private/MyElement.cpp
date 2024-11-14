@@ -33,7 +33,13 @@ void AMyElement::Tick(float DeltaTime)
 
 void AMyElement::InteractWithThis()
 {
-	//OtherInventoryRef->AddItem(this);
-	Destroy();
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Item has been interacted with"));
 }
+
+//void AMyElement::InteractWithThis()
+//{
+//	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Item has been interacted with"));
+//	//OtherInventoryRef->AddItem(this);
+//	//Destroy();
+//}
 

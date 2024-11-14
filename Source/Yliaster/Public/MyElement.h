@@ -22,7 +22,7 @@ enum class ElementType : uint8 {
 class UInventoryComponent;
 
 UCLASS()
-class YLIASTER_API AMyElement : public AActor
+class YLIASTER_API AMyElement : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 
@@ -67,7 +67,11 @@ public:
 	//Element type will be coded as "F" - fire, "W" - water, "A" - air, "E" - earth.
 	//It is possible to go with "M" - metal, "I" - ice, "P" - plant, "L" - lighting
 
-	virtual void InteractWithThis();
+	//virtual void InteractWithThis() override;
 
+
+
+	// Inherited via IInteractionInterface
+	virtual void InteractWithThis() override;
 
 };
