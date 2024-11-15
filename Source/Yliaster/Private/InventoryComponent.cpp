@@ -3,6 +3,7 @@
 
 #include "InventoryComponent.h"
 #include "MyElement.h"
+#include "InteractionInterface.h"
 
 
 // Sets default values for this component's properties
@@ -27,6 +28,18 @@ void UInventoryComponent::BeginPlay()
 }
 
 
+//void UInventoryComponent::InputInteract()  // -- We need input controller first.
+//{
+//	if (Interface)
+//	{
+//		Interface->InteractWithThis();
+//	}
+//
+//	// ...
+//
+//}  //-- Remember to add OnOverlap to Obstacle so that it can assign pointer *actually, better do that with the character... 
+
+
 // Called every frame
 void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -35,14 +48,14 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-bool UInventoryComponent::AddItem(AMyElement* Item)
+bool UInventoryComponent::AddItem(ElementType Item)
 {
 	InventoryStack.Push(Item);
 	// WHY CAN I NOT PUSH THE ITEM INTO THE STACK?????? :(
 	return false;
 }
 
-bool UInventoryComponent::RemoveItem(AMyElement* Item)
+bool UInventoryComponent::RemoveItem(ElementType Item)
 {
 	InventoryStack.Pop();
 	return false;

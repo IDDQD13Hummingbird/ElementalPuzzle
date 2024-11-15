@@ -136,6 +136,8 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 	UVVTile* CurrentTile{ nullptr };
 	TileNode CurrentData{ 0, 0, nullptr };
 
+	UVVTile* CurrentClosestTile{ StartTile };
+
 	// While Open.Size() > 0
 	while (!OpenTiles.IsEmpty())
 	{
@@ -161,6 +163,9 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 			return Path;
 		}
 
+		if (ManhattenDistance(CurrentTile, EndTile) < ManhattenDistance(CurrentClosestTile, EndTile))
+			CurrentClosestTile = CurrentTile;
+
 		//	Remove Current from Open
 		OpenTiles.Remove(CurrentTile);
 
@@ -185,6 +190,8 @@ TArray<UVVTile*> AVVGrid::FindPath(UVVTile* StartTile, UVVTile* EndTile)
 		ClosedTiles.Add(CurrentTile, CurrentData);
 	}
 
+	CurrentData = *ClosedTiles.Find(CurrentClosestTile);
+	CurrentTile = CurrentClosestTile;
 	while (CurrentData.Parent)
 	{
 		Path.EmplaceAt(0, CurrentTile);

@@ -8,6 +8,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "InventoryComponent.h"
+
 #include "InteractionInterface.h"
 #include "MyChar.generated.h"
 
@@ -15,7 +17,7 @@ class AVVGrid;
 class UVVTile;
 
 UCLASS()
-class YLIASTER_API AMyChar : public ACharacter, public IInteractionInterface
+class YLIASTER_API AMyChar : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -59,20 +61,40 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	class UInventoryComponent* InventoryReference;
 
-	IInteractionInterface* Interface = nullptr;
+	IInteractionInterface* Interface;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	AVVGrid* GridReference;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	UVVTile* TileReference;
+	UPROPERTY()
+	float MovementDelta;
+
+	UPROPERTY()
+	UVVTile* CurrentTile;
+
+	UPROPERTY()
+	TArray<UVVTile*> TargetTile;
+
+
+	// Input and IMC
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputMappingContext* IMC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputAction* TestAction;
 
 
 	// VARIABLES
 
 	// Base movement speed of the coontrolled character
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
-	float BaseMoveSpeed = 150.0f;
+	float BaseMoveSpeed = 5.0f;
 
 	FVector Direction;
 	FVector StartLocation;
@@ -90,6 +112,10 @@ public:
 	FVector GetCharLocation();
 
 	UFUNCTION()
+	void CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
+		int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
 	void InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 		int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -99,8 +125,12 @@ public:
 
 	void InteractOnInput();
 
+	void TestInput();
+
 	UFUNCTION()
 	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed);
+
+
 
 };
 

@@ -7,11 +7,12 @@ using namespace std;
 #include "Components/ActorComponent.h"
 #include "stack"
 #include "MyElement.h"
+#include "InteractionInterface.h"
 #include "InventoryComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class YLIASTER_API UInventoryComponent : public UActorComponent
+class YLIASTER_API UInventoryComponent : public UActorComponent//, public IInteractionInterface
 {
 	GENERATED_BODY()
 
@@ -31,17 +32,18 @@ public:
 	// COMPONENTS
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
-	TArray<AMyElement*> InventoryStack;
+	TArray<ElementType> InventoryStack;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Component")
 	int32 Capacity;
 
-
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	//TSubclassOf<class IInteractionInterface>  Interface;
 	// FUNCTIONS
 
 
-	bool AddItem(AMyElement* Item);
-	bool RemoveItem(AMyElement* Item);
+	bool AddItem(ElementType Item);
+	bool RemoveItem(ElementType Item);
 
 
 };
