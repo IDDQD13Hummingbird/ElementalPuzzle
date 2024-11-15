@@ -11,7 +11,7 @@ class AVVGrid;
 class IVVGridActorInterface;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTileObjectClickedSignature, FKey, ButtonPressed);
-DECLARE_DYNAMIC_DELEGATE(FCallInteractSignature);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FCallInteractSignature, APawn*, InteractingPlayer);
 
 
 /**
@@ -32,10 +32,12 @@ protected:
 	AVVGrid* CurrentGrid;
 
 	UPROPERTY()
-	AActor* InteractingPlayer;
+	APawn* InteractingPlayer;
 
 	UPROPERTY()
 	bool bShouldInteract;
+
+
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -43,8 +45,13 @@ protected:
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+
 	UFUNCTION()
 	void TileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed);
+	
+	UFUNCTION()
+	void GridClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed);
+
 
 	UFUNCTION()
 	void ModifyTile(UVVTile* TargetTile);

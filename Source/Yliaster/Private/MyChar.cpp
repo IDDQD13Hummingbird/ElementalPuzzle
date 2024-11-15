@@ -62,12 +62,12 @@ void AMyChar::BeginPlay()
 void AMyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (CurrentDistance < TotalDistance) {
+	/*if (CurrentDistance < TotalDistance) {
 		FVector Location = GetActorLocation();
 		Location += Direction * BaseMoveSpeed * DeltaTime;
 		SetActorLocation(Location);
 		CurrentDistance = (Location - StartLocation).Size();
-	}
+	}*/
 
 	if (!TargetTile.IsEmpty())
 	{

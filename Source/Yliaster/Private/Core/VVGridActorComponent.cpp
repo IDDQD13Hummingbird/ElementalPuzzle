@@ -7,6 +7,8 @@
 
 UVVGridActorComponent::UVVGridActorComponent()
 {
+	CanCharacterStepUpOn = ECanBeCharacterBase::ECB_No;
+
 	CostModifier = 0;
 	bShouldInteract = false;
 	CurrentGrid = nullptr;
@@ -26,13 +28,14 @@ void UVVGridActorComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedCompon
 		}
 	}
 
-	if (bShouldInteract)
+	if (APawn* OtherPawn = Cast<APawn>(OtherActor))
+		InteractingPlayer = OtherPawn;
+
+	if (bShouldInteract && InteractingPlayer)
 	{
-		ShouldInteractDelegate.ExecuteIfBound();
+		ShouldInteractDelegate.ExecuteIfBound(InteractingPlayer);
 		bShouldInteract = false;
 	}
-
-	InteractingPlayer = OtherActor;
 }
 
 void UVVGridActorComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -43,19 +46,29 @@ void UVVGridActorComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComponen
 	InteractingPlayer = nullptr;
 }
 
+
+// Called when any intersecting tile is clicked
 void UVVGridActorComponent::TileClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed)
 {
 	ObjectClickedDelegate.Broadcast(ButtonPressed);
 
 	if (InteractingPlayer)
 	{
-		ShouldInteractDelegate.ExecuteIfBound();
+		ShouldInteractDelegate.ExecuteIfBound(InteractingPlayer);
 	}
 	else
 	{
 		bShouldInteract = true;
 	}
 }
+
+// Called when any tile on the grid is clicked
+void UVVGridActorComponent::GridClicked(UVVTile* TileClicked, int32 X, int32 Y, FKey ButtonPressed)
+{
+	bShouldInteract = false;
+}
+
+
 
 void UVVGridActorComponent::ModifyTile(UVVTile* TargetTile)
 {
@@ -103,6 +116,7 @@ void UVVGridActorComponent::BeginPlay()
 			if (AVVGrid* NewGrid = Cast<AVVGrid>(ActorN))
 			{
 				CurrentGrid = NewGrid;
+				CurrentGrid->TileClickedDelegate.AddDynamic(this, &UVVGridActorComponent::GridClicked);
 				break;
 			}
 		}
