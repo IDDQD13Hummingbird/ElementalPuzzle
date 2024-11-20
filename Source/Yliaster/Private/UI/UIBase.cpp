@@ -61,3 +61,11 @@ void UUIBase::ReplaceElement(int32 ElementIndex)
 	UVVElementIcon* CurrentElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
 	CurrentElement->SetVisual(ElementVisuals[ElementIndex]);
 }
+
+UUserWidget* UUIBase::DisplayWidget(TSubclassOf<UUserWidget> WidgetToDisplay)
+{
+	UUserWidget* NewWidget = CreateWidget<UUserWidget>(this, WidgetToDisplay);
+	WidgetDisplay->SetContent(NewWidget);
+
+	return NewWidget;
+}

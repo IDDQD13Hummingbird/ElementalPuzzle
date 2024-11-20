@@ -24,6 +24,9 @@ protected:
 	UCanvasPanel* BaseCanvas;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget), Category = "UI")
+	UNamedSlot* WidgetDisplay;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget), Category = "UI")
 	UHorizontalBox* InventorySlot;
 
 	UPROPERTY(meta = (BindWidget))
@@ -47,4 +50,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ReplaceElement(int32 ElementIndex);
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	UUserWidget* DisplayWidget(TSubclassOf<UUserWidget> WidgetToDisplay);
 };

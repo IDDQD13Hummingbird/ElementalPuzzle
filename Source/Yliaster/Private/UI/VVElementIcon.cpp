@@ -10,7 +10,7 @@ void UVVElementIcon::SetVisual(UTexture2D* NewImage)
 		return;
 
 	BaseVisual->SetBrushFromTexture(NewImage);
-	BaseVisual->SetBrushSize(FVector2D(80, 80));
+	BaseVisual->SetDesiredSizeOverride(FVector2D(80, 80));
 
 
 }
