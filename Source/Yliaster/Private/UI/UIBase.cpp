@@ -56,7 +56,7 @@ int32 UUIBase::RemoveElement()
 int32 UUIBase::CheckElement()
 {
 	if (!ActiveSlot->GetContent())
-		return 0;
+		return -1;
 	
 	UVVElementIcon* CurrentElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
 	return CurrentElement->ElementIndex;
