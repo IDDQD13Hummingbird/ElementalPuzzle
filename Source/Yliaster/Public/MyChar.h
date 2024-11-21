@@ -15,6 +15,8 @@
 
 class AVVGrid;
 class UVVTile;
+class UVVUIComponent;
+
 
 UCLASS()
 class YLIASTER_API AMyChar : public ACharacter
@@ -61,6 +63,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	class UInventoryComponent* InventoryReference;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+	UVVUIComponent* UIComponentReference;
+
 	IInteractionInterface* Interface;
 	
 
@@ -88,6 +93,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	class UInputAction* TestAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	class UInputAction* DropAction;
 
 
 	// VARIABLES
@@ -126,6 +134,8 @@ public:
 	void InteractOnInput();
 
 	void TestInput();
+
+	void CallRemoveElement();
 
 	UFUNCTION()
 	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed);
