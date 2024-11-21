@@ -62,6 +62,11 @@ void UVVUIComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
+UUIBase* UVVUIComponent::GetUIBase()
+{
+	return UIBase;
+}
+
 UUserWidget* UVVUIComponent::DisplayWidget(TSubclassOf<UUserWidget> WidgetToDisplay)
 {
 	if (!UIBase)
