@@ -159,7 +159,8 @@ void AMyChar::TestInput()
 
 void AMyChar::CallRemoveElement()
 {
-	//UIComponentReference
+	UIComponentReference->GetUIBase()->RemoveElement();
+
 }
 
 void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed)
@@ -206,7 +207,7 @@ void AMyChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	{
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMyChar::InteractOnInput);
 		EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &AMyChar::TestInput);
-		//EnhancedInputComponent->BindAction(DropAction, ETriggerEvent::Completed, this, &UUIBase::RemoveElement);
+		EnhancedInputComponent->BindAction(DropAction, ETriggerEvent::Completed, this, &AMyChar::CallRemoveElement);
 	}
 
 }

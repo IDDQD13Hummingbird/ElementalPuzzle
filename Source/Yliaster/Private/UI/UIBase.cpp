@@ -33,8 +33,11 @@ UVVElementIcon* UUIBase::AddElement(int32 ElementIndex)
 
 int32 UUIBase::RemoveElement()
 {
-	if (!ActiveSlot->GetContent())
+	
+	if (!ActiveSlot->GetContent()) {
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Inventory is empty, cannot remove element"));
 		return -1;
+	}
 
 	UVVElementIcon* RemovedElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
 	int32 RemovedElementIndex = RemovedElement->ElementIndex;
