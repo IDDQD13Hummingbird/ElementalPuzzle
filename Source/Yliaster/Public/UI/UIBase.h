@@ -49,6 +49,9 @@ public:
 	int32 RemoveElement();
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
+	int32 CheckElement();
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ReplaceElement(int32 ElementIndex);
 
 	UFUNCTION(BlueprintCallable, Category = "UI")

@@ -53,6 +53,15 @@ int32 UUIBase::RemoveElement()
 	return RemovedElementIndex;
 }
 
+int32 UUIBase::CheckElement()
+{
+	if (!ActiveSlot->GetContent())
+		return 0;
+	
+	UVVElementIcon* CurrentElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
+	return CurrentElement->ElementIndex;
+}
+
 void UUIBase::ReplaceElement(int32 ElementIndex)
 {
 	if (!ElementVisuals[ElementIndex] || !ActiveSlot->GetContent())
