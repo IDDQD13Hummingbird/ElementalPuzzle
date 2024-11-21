@@ -7,6 +7,9 @@
 #include "Components/BoxComponent.h"
 #include "VVInWorldElement.generated.h"
 
+class UWidgetComponent;
+class UVVElementIcon;
+
 UCLASS()
 class YLIASTER_API AVVInWorldElement : public AActor
 {
@@ -24,7 +27,10 @@ protected:
 	UBoxComponent* PickupRange;
 
 	UPROPERTY(EditAnywhere, Category = "Element")
-	int32 ElementIndex;
+	int32 ElementType;
+
+	UPROPERTY(EditAnywhere, Category = "Element")
+	UWidgetComponent* ElementVisual;
 
 	UFUNCTION()
 	void OnRangeEntered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -32,5 +38,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Element")
+	void SetElement(int32 ElementIndex, UUserWidget* ElementIcon);
 
 };

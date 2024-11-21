@@ -2,9 +2,9 @@
 
 
 #include "Core/VVInWorldElement.h"
+#include "Components/WidgetComponent.h"
 #include "Core/Player/VVUIComponent.h"
-#include "Core/Player/VVUIComponent.h"
-#include"UI/UIBase.h"
+#include "UI/UIBase.h"
 
 // Sets default values
 AVVInWorldElement::AVVInWorldElement()
@@ -16,6 +16,11 @@ AVVInWorldElement::AVVInWorldElement()
 	{
 		PickupRange = CreateDefaultSubobject<UBoxComponent>(FName("Pickup Range"));
 		PickupRange->SetupAttachment(RootComponent);
+	}
+	if (!ElementVisual)
+	{
+		ElementVisual = CreateDefaultSubobject<UWidgetComponent>(FName("Icon Display"));
+		ElementVisual->SetupAttachment(PickupRange);
 	}
 
 }
@@ -36,7 +41,7 @@ void AVVInWorldElement::OnRangeEntered(UPrimitiveComponent* OverlappedComponent,
 {
 	if (UVVUIComponent* TargetUIComponent = OtherActor->GetComponentByClass<UVVUIComponent>())
 	{
-		TargetUIComponent->GetUIBase()->AddElement(ElementIndex);
+		TargetUIComponent->GetUIBase()->AddElement(ElementType);
 		Destroy();
 	}
 }
@@ -46,5 +51,14 @@ void AVVInWorldElement::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AVVInWorldElement::SetElement(int32 ElementIndex, UUserWidget* ElementIcon)
+{
+	if (!ElementVisual)
+		return;
+
+	ElementType = ElementIndex;
+	ElementVisual->SetWidget(ElementIcon);
 }
 
