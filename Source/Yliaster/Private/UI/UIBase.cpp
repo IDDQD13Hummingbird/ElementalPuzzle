@@ -7,10 +7,12 @@
 #include "Components/NamedSlot.h"
 #include "UI/VVElementIcon.h"
 
-UVVElementIcon* UUIBase::AddElement(int32 ElementIndex)
+UVVElementIcon* UUIBase::AddElement(EVVElementType ElementType)
 {
-	if (!ElementVisuals[ElementIndex] || !ElementDisplayClass)
+	if (ElementData.IsNull())
 		return nullptr;
+
+	FVVElement* NewElementData = ElementData.DataTable->FindRow<FVVElement>(FName(UEnum::GetDisplayValueAsText(ElementType).ToString()), "");
 
 	// If there is an active element move it to inventory
 	if (ActiveSlot->GetContent())
@@ -24,20 +26,20 @@ UVVElementIcon* UUIBase::AddElement(int32 ElementIndex)
 	}
 
 	UVVElementIcon* NewElement = CreateWidget<UVVElementIcon>(this, ElementDisplayClass);
-	NewElement->SetVisual(ElementVisuals[ElementIndex]);
-	NewElement->ElementIndex = ElementIndex;
+	NewElement->SetVisual(NewElementData->Icon);
+	NewElement->ElementType = NewElementData->Type;
 	ActiveSlot->SetContent(NewElement);
 
     return NewElement;
 }
 
-int32 UUIBase::RemoveElement()
+EVVElementType UUIBase::RemoveElement()
 {
 	if (!ActiveSlot->GetContent())
-		return -1;
+		return EVVElementType::Null;
 
 	UVVElementIcon* RemovedElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
-	int32 RemovedElementIndex = RemovedElement->ElementIndex;
+	EVVElementType RemovedElementType = RemovedElement->ElementType;
 
 
 	int32 ElementCount = InventorySlot->GetChildrenCount();
@@ -50,25 +52,27 @@ int32 UUIBase::RemoveElement()
 		ActiveSlot->SetContent(nullptr);
 	}
 
-	return RemovedElementIndex;
+	return RemovedElementType;
 }
 
-int32 UUIBase::CheckElement()
+EVVElementType UUIBase::CheckElement()
 {
 	if (!ActiveSlot->GetContent())
-		return -1;
+		return EVVElementType::Null;
 	
 	UVVElementIcon* CurrentElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
-	return CurrentElement->ElementIndex;
+	return CurrentElement->ElementType;
 }
 
-void UUIBase::ReplaceElement(int32 ElementIndex)
+void UUIBase::ReplaceElement(EVVElementType ElementType)
 {
-	if (!ElementVisuals[ElementIndex] || !ActiveSlot->GetContent())
+	if (ElementData.IsNull())
 		return;
 	
+	FVVElement* NewElementData = ElementData.DataTable->FindRow<FVVElement>(FName(UEnum::GetDisplayValueAsText(ElementType).ToString()), "");
+
 	UVVElementIcon* CurrentElement = Cast<UVVElementIcon>(ActiveSlot->GetContent());
-	CurrentElement->SetVisual(ElementVisuals[ElementIndex]);
+	CurrentElement->SetVisual(NewElementData->Icon);
 }
 
 UUserWidget* UUIBase::DisplayWidget(TSubclassOf<UUserWidget> WidgetToDisplay)

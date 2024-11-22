@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Core/VVElementData.h"
 #include "VVInWorldElement.generated.h"
 
 class UWidgetComponent;
-class UVVElementIcon;
 
 UCLASS()
 class YLIASTER_API AVVInWorldElement : public AActor
@@ -23,11 +23,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, meta = (RowType = "VVElement"))
+	FDataTableRowHandle ElementData;
+
 	UPROPERTY(EditAnywhere, Category = "Element")
 	UBoxComponent* PickupRange;
 
 	UPROPERTY(EditAnywhere, Category = "Element")
-	int32 ElementType;
+	EVVElementType CurrentElementType;
 
 	UPROPERTY(EditAnywhere, Category = "Element")
 	UWidgetComponent* ElementVisual;
@@ -35,11 +38,13 @@ protected:
 	UFUNCTION()
 	void OnRangeEntered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-public:	
+public:
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Element")
-	void SetElement(int32 ElementIndex, UUserWidget* ElementIcon);
+	void SetElement(EVVElementType ElementType);
 
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Core/VVElementData.h"
 #include "VVElementIcon.generated.h"
 
 class UImage;
@@ -24,6 +25,6 @@ public:
 	void SetVisual(UTexture2D* NewImage);
 
 	UPROPERTY(EditAnywhere, Category = "Element")
-	int32 ElementIndex;
+	EVVElementType ElementType;
 	
 };

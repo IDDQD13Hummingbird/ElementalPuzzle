@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Core/VVElementData.h"
 #include "UIBase.generated.h"
 
 class UCanvasPanel;
@@ -20,6 +21,9 @@ class YLIASTER_API UUIBase : public UUserWidget
 {
 	GENERATED_BODY()
 protected:
+	UPROPERTY(EditAnywhere, meta = (RowType = "VVElement"))
+	FDataTableRowHandle ElementData;
+
 	UPROPERTY(EditAnywhere, meta = (BindWidget), Category = "UI")
 	UCanvasPanel* BaseCanvas;
 
@@ -35,24 +39,22 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (BindWidget), Category = "UI")
 	UNamedSlot* ActiveSlot;
 
-	UPROPERTY(EditAnywhere, Category = "Assets")
-	TArray<UTexture2D*> ElementVisuals;
 
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UVVElementIcon> ElementDisplayClass;
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	UVVElementIcon* AddElement(int32 ElementIndex);
+	UVVElementIcon* AddElement(EVVElementType ElementType);
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	int32 RemoveElement();
+	EVVElementType RemoveElement();
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	int32 CheckElement();
+	EVVElementType CheckElement();
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	void ReplaceElement(int32 ElementIndex);
+	void ReplaceElement(EVVElementType ElementType);
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	UUserWidget* DisplayWidget(TSubclassOf<UUserWidget> WidgetToDisplay);

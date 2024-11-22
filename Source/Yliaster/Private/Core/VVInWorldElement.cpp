@@ -4,6 +4,7 @@
 #include "Core/VVInWorldElement.h"
 #include "Components/WidgetComponent.h"
 #include "Core/Player/VVUIComponent.h"
+#include "UI/VVElementIcon.h"
 #include "UI/UIBase.h"
 
 // Sets default values
@@ -34,17 +35,29 @@ void AVVInWorldElement::BeginPlay()
 	{
 		PickupRange->OnComponentBeginOverlap.AddDynamic(this, &AVVInWorldElement::OnRangeEntered);
 	}
-	
 }
 
 void AVVInWorldElement::OnRangeEntered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (UVVUIComponent* TargetUIComponent = OtherActor->GetComponentByClass<UVVUIComponent>())
 	{
-		TargetUIComponent->GetUIBase()->AddElement(ElementType);
+		TargetUIComponent->GetUIBase()->AddElement(CurrentElementType);
 		Destroy();
 	}
 }
+
+#if WITH_EDITOR
+void AVVInWorldElement::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	FVVElement* CurrentElement = ElementData.GetRow<FVVElement>("");
+	if (CurrentElement->Type != CurrentElementType)
+	{
+		SetElement(CurrentElement->Type);
+	}
+}
+#endif
 
 // Called every frame
 void AVVInWorldElement::Tick(float DeltaTime)
@@ -53,12 +66,17 @@ void AVVInWorldElement::Tick(float DeltaTime)
 
 }
 
-void AVVInWorldElement::SetElement(int32 ElementIndex, UUserWidget* ElementIcon)
+void AVVInWorldElement::SetElement(EVVElementType ElementType)
 {
 	if (!ElementVisual)
 		return;
 
-	ElementType = ElementIndex;
-	ElementVisual->SetWidget(ElementIcon);
+	CurrentElementType = ElementType;
+
+	if (UVVElementIcon* CurrentElementWidget = Cast<UVVElementIcon>(ElementVisual->GetWidget()))
+	{
+		FVVElement* CurrentElement = ElementData.DataTable->FindRow<FVVElement>(FName(UEnum::GetDisplayValueAsText(ElementType).ToString()), "");
+		CurrentElementWidget->SetVisual(CurrentElement->Icon);
+	}
 }
 
