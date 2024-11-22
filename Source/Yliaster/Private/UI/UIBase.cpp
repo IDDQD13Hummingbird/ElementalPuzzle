@@ -9,7 +9,7 @@
 
 UVVElementIcon* UUIBase::AddElement(EVVElementType ElementType)
 {
-	if (ElementData.IsNull())
+	if (ElementData.IsNull() || ElementType == EVVElementType::Null)
 		return nullptr;
 
 	FVVElement* NewElementData = ElementData.DataTable->FindRow<FVVElement>(FName(UEnum::GetDisplayValueAsText(ElementType).ToString()), "");
@@ -66,7 +66,7 @@ EVVElementType UUIBase::CheckElement()
 
 void UUIBase::ReplaceElement(EVVElementType ElementType)
 {
-	if (ElementData.IsNull())
+	if (ElementData.IsNull() || ElementType == EVVElementType::Null)
 		return;
 	
 	FVVElement* NewElementData = ElementData.DataTable->FindRow<FVVElement>(FName(UEnum::GetDisplayValueAsText(ElementType).ToString()), "");
