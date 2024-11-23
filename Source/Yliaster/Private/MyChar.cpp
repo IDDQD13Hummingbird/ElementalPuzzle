@@ -9,6 +9,8 @@
 #include "InventoryComponent.h"
 #include "Core/VVGrid.h"
 #include "Core/VVTile.h"
+#include "UI/UIBase.h"
+#include "Core/Player/VVUIComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
 
 // Sets default values
@@ -33,6 +35,8 @@ AMyChar::AMyChar()
 	//Inventory->Capacity = 5;
 
 	Target = CreateDefaultSubobject<UBoxComponent>(TEXT("Target"));
+
+	UIComponentReference = CreateDefaultSubobject<UVVUIComponent>(TEXT("UI Component Reference"));
 
 }
 
@@ -153,6 +157,12 @@ void AMyChar::TestInput()
 	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("interact action pressed"));
 }
 
+void AMyChar::CallRemoveElement()
+{
+	UIComponentReference->GetUIBase()->RemoveElement();
+
+}
+
 void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed)
 {
 	if (!TargetTile.IsEmpty())
@@ -197,6 +207,7 @@ void AMyChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	{
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMyChar::InteractOnInput);
 		EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &AMyChar::TestInput);
+		EnhancedInputComponent->BindAction(DropAction, ETriggerEvent::Completed, this, &AMyChar::CallRemoveElement);
 	}
 
 }
