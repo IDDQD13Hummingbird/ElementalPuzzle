@@ -8,6 +8,7 @@
 UVVGridActorComponent::UVVGridActorComponent()
 {
 	CanCharacterStepUpOn = ECanBeCharacterBase::ECB_No;
+	SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
 
 	CostModifier = 0;
 	bShouldInteract = false;

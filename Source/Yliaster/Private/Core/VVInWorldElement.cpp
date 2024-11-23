@@ -68,6 +68,13 @@ void AVVInWorldElement::Tick(float DeltaTime)
 
 }
 
+void AVVInWorldElement::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	SetElement(CurrentElementType);
+}
+
 void AVVInWorldElement::SetElement(EVVElementType ElementType)
 {
 	if (!ElementVisual)
