@@ -164,7 +164,7 @@ void AMyChar::CallRemoveElement()
 		FVector PlayerLocation = GetActorLocation();
 		FRotator PlayerRotation = GetActorRotation();
 		UWorld* World = GetWorld();
-		PlayerLocation += FVector(150, 0, 50);
+		PlayerLocation += FVector(130, 0, 50);
 
 		// Removes the element in the first spot in the element stack
 		//UIComponentReference->GetUIBase()->RemoveElement();
