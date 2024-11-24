@@ -10,7 +10,6 @@
 #include "Core/VVGrid.h"
 #include "Core/VVTile.h"
 #include "UI/UIBase.h"
-#include "Core/VVInWorldElement.h"
 #include "Core/Player/VVUIComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
 
@@ -161,17 +160,17 @@ void AMyChar::TestInput()
 
 void AMyChar::CallRemoveElement()
 {
-	FVector PlayerLocation = GetActorLocation();
-	FRotator PlayerRotation = GetActorRotation();
-	UWorld* World = GetWorld();
-	PlayerLocation += FVector(100, 0, 50);
+	if (SpawnedElementClass) {
+		FVector PlayerLocation = GetActorLocation();
+		FRotator PlayerRotation = GetActorRotation();
+		UWorld* World = GetWorld();
+		PlayerLocation += FVector(150, 0, 50);
 
-	// Removes the element in the first spot in the element stack
-	//UIComponentReference->GetUIBase()->RemoveElement();
+		// Removes the element in the first spot in the element stack
+		//UIComponentReference->GetUIBase()->RemoveElement();
 
-	EVVElementType ElementOfRemoved = UIComponentReference->GetUIBase()->RemoveElement();
+		EVVElementType ElementOfRemoved = UIComponentReference->GetUIBase()->RemoveElement();
 
-	if (ElementOfRemoved == EVVElementType::Fire) {
 		if (World) {
 			FActorSpawnParameters SpawnParams;
 			//SpawnParams.Owner = this;
@@ -179,11 +178,13 @@ void AMyChar::CallRemoveElement()
 
 			AVVInWorldElement* SpawnedElement = World->SpawnActor<AVVInWorldElement>(SpawnedElementClass, PlayerLocation, PlayerRotation, SpawnParams);
 			if (SpawnedElement) {
-				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was dropped"));
+				SpawnedElement->SetElement(ElementOfRemoved);
 			}
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element is fire"));
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was spawned"));
 		}
+		
 	}
+	
 
 
 }

@@ -9,6 +9,7 @@
 #include "Components/BoxComponent.h"
 
 #include "InventoryComponent.h"
+#include "Core/VVInWorldElement.h"
 
 #include "InteractionInterface.h"
 #include "MyChar.generated.h"
