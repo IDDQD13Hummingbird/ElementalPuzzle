@@ -18,6 +18,11 @@ void AVVGrid::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (RootComponent->GetNumChildrenComponents() != Columns * Rows)
+	{
+		PopulateGrid();
+	}
+
 	TArray<USceneComponent*> Tiles;
 	RootComponent->GetChildrenComponents(false, Tiles);
 	for (USceneComponent* var : Tiles)
