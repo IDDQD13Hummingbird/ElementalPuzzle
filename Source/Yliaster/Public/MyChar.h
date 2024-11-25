@@ -9,6 +9,7 @@
 #include "Components/BoxComponent.h"
 
 #include "InventoryComponent.h"
+#include "Core/VVInWorldElement.h"
 
 #include "InteractionInterface.h"
 #include "MyChar.generated.h"
@@ -16,6 +17,7 @@
 class AVVGrid;
 class UVVTile;
 class UVVUIComponent;
+
 
 
 UCLASS()
@@ -63,11 +65,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	class UInventoryComponent* InventoryReference;
 
+	// Reference to User Interface Component
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	UVVUIComponent* UIComponentReference;
 
+	// Ehich class element to spawn
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AVVInWorldElement> SpawnedElementClass;
+
 	IInteractionInterface* Interface;
-	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 	AVVGrid* GridReference;
@@ -112,9 +118,6 @@ public:
 
 	// FUNCTIONS
 
-
-	//UFUNCTION()
-	//void MoveCharacter();
 
 	UFUNCTION()
 	FVector GetCharLocation();

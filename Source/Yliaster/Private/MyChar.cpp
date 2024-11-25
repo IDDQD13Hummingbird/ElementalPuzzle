@@ -34,6 +34,7 @@ AMyChar::AMyChar()
 	InventoryReference = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 	//Inventory->Capacity = 5;
 
+	// This was originally supposed to be for testing the movement, but is now used as a second interaction box
 	Target = CreateDefaultSubobject<UBoxComponent>(TEXT("Target"));
 
 	UIComponentReference = CreateDefaultSubobject<UVVUIComponent>(TEXT("UI Component Reference"));
@@ -159,7 +160,32 @@ void AMyChar::TestInput()
 
 void AMyChar::CallRemoveElement()
 {
-	UIComponentReference->GetUIBase()->RemoveElement();
+	if (SpawnedElementClass) {
+		FVector PlayerLocation = GetActorLocation();
+		FRotator PlayerRotation = GetActorRotation();
+		UWorld* World = GetWorld();
+		PlayerLocation += FVector(130, 0, 50);
+
+		// Removes the element in the first spot in the element stack
+		//UIComponentReference->GetUIBase()->RemoveElement();
+
+		EVVElementType ElementOfRemoved = UIComponentReference->GetUIBase()->RemoveElement();
+
+		if (World) {
+			FActorSpawnParameters SpawnParams;
+			//SpawnParams.Owner = this;
+			//SpawnParams.Instigator = GetInstigator(); //this is the pawn responsible for the damage done by the spawned actor, this probably isn't needed here
+
+			AVVInWorldElement* SpawnedElement = World->SpawnActor<AVVInWorldElement>(SpawnedElementClass, PlayerLocation, PlayerRotation, SpawnParams);
+			if (SpawnedElement) {
+				SpawnedElement->SetElement(ElementOfRemoved);
+			}
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was spawned"));
+		}
+		
+	}
+	
+
 
 }
 
