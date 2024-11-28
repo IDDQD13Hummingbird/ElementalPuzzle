@@ -62,6 +62,12 @@ public:
 	FIntCoord CoordsFromIndex(int32 Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")
+	const int32 GetColumns() { return Columns; };
+	UFUNCTION(BlueprintCallable, Category = "Grid")
+	const int32 GetRows() { return Rows; };
+
+
+	UFUNCTION(BlueprintCallable, Category = "Grid")
 	UVVTile* GetTile(int32 X, int32 Y);
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")
