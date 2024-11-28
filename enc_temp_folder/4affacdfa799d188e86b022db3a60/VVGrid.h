@@ -41,6 +41,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	int32 Rows = 10;
 
+
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	TSubclassOf<UVVTile> BaseTileClass;
 
@@ -59,12 +60,6 @@ public:
 	int32 IndexFromCoords(int32 X, int32 Y);
 	UFUNCTION()
 	FIntCoord CoordsFromIndex(int32 Index);
-
-	UFUNCTION(BlueprintCallable, Category = "Grid")
-	const int32 GetColumns() { return Columns; };
-	UFUNCTION(BlueprintCallable, Category = "Grid")
-	const int32 GetRows() { return Rows; };
-
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")
 	UVVTile* GetTile(int32 X, int32 Y);
