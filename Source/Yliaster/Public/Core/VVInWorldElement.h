@@ -38,6 +38,9 @@ protected:
 	UFUNCTION()
 	void OnRangeEntered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnRangeLeft(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 public:
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -51,4 +54,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Element")
 	void SetElement(EVVElementType ElementType);
 
+	UPROPERTY()
+	bool bCanBePickedUp = true;
 };

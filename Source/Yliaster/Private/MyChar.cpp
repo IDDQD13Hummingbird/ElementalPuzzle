@@ -164,23 +164,25 @@ void AMyChar::CallRemoveElement()
 		FVector PlayerLocation = GetActorLocation();
 		FRotator PlayerRotation = GetActorRotation();
 		UWorld* World = GetWorld();
-		PlayerLocation += FVector(130, 0, 50);
 
 		// Removes the element in the first spot in the element stack
 		//UIComponentReference->GetUIBase()->RemoveElement();
 
 		EVVElementType ElementOfRemoved = UIComponentReference->GetUIBase()->RemoveElement();
 
-		if (World) {
+		if (World && ElementOfRemoved != EVVElementType::Null) {
 			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 			//SpawnParams.Owner = this;
 			//SpawnParams.Instigator = GetInstigator(); //this is the pawn responsible for the damage done by the spawned actor, this probably isn't needed here
 
-			AVVInWorldElement* SpawnedElement = World->SpawnActor<AVVInWorldElement>(SpawnedElementClass, PlayerLocation, PlayerRotation, SpawnParams);
+			AVVInWorldElement* SpawnedElement = World->SpawnActor<AVVInWorldElement>(SpawnedElementClass, PlayerLocation + FVector(0, 0, 150), PlayerRotation, SpawnParams);
 			if (SpawnedElement) {
 				SpawnedElement->SetElement(ElementOfRemoved);
+				SpawnedElement->bCanBePickedUp = false;
+				SpawnedElement->SetActorLocation(PlayerLocation);
+				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was spawned"));
 			}
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was spawned"));
 		}
 		
 	}

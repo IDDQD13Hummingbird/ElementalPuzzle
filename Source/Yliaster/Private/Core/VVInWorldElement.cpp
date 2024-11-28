@@ -16,7 +16,7 @@ AVVInWorldElement::AVVInWorldElement()
 	if (!PickupRange)
 	{
 		PickupRange = CreateDefaultSubobject<UBoxComponent>(FName("Pickup Range"));
-		PickupRange->SetupAttachment(RootComponent);
+		RootComponent = PickupRange;
 	}
 	if (!ElementVisual)
 	{
@@ -34,6 +34,7 @@ void AVVInWorldElement::BeginPlay()
 	if (PickupRange)
 	{
 		PickupRange->OnComponentBeginOverlap.AddDynamic(this, &AVVInWorldElement::OnRangeEntered);
+		PickupRange->OnComponentEndOverlap.AddDynamic(this, &AVVInWorldElement::OnRangeLeft);
 	}
 
 	SetElement(CurrentElementType);
@@ -41,11 +42,20 @@ void AVVInWorldElement::BeginPlay()
 
 void AVVInWorldElement::OnRangeEntered(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (!bCanBePickedUp)
+		return;
+
 	if (UVVUIComponent* TargetUIComponent = OtherActor->GetComponentByClass<UVVUIComponent>())
 	{
 		TargetUIComponent->GetUIBase()->AddElement(CurrentElementType);
 		Destroy();
 	}
+}
+
+void AVVInWorldElement::OnRangeLeft(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (Cast<APawn>(OtherActor))
+		bCanBePickedUp = true;
 }
 
 #if WITH_EDITOR
