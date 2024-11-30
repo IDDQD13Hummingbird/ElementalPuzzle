@@ -39,7 +39,7 @@ void AVVGrid::OnConstruction(const FTransform& Transform)
 	
 	if (!BaseTileClass)
 		return;
-	
+
 	PopulateGrid();
 }
 

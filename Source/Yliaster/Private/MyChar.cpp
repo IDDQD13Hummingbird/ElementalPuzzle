@@ -104,6 +104,7 @@ void AMyChar::CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		if (GridReference) {
 			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called"));
 			GridReference->TileClickedDelegate.AddDynamic(this, &AMyChar::GridDetectionTest);
+			GridRecievedDelegate.Broadcast();
 		}
 	}
 
@@ -201,7 +202,7 @@ void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y,
 		TargetTile.Empty();
 		TargetTile.Add(CurrentTarget);
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Grid Detected"));
+	// GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Grid Detected"));
 	StartLocation = GetActorLocation();
 	Direction = FetchedTileReference->GetComponentLocation() - StartLocation;
 	TotalDistance = Direction.Size();

@@ -25,6 +25,11 @@ class YLIASTER_API UVVGridActorComponent : public UBoxComponent
 protected:
 	UVVGridActorComponent();
 
+	FTimerHandle InitDelay;
+
+	UFUNCTION(BlueprintCallable, Category = "Grid")
+	virtual void InitializeTiles();
+
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	int32 CostModifier;
 

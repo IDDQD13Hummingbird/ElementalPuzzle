@@ -54,9 +54,8 @@ void UVVTile::OnCursorClicked(UPrimitiveComponent* TouchedComponent, FKey Button
 {
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Emerald, FString::Printf(TEXT("Coordinates are X: %i, Y: %i"), XCoordinate, YCoordinate));
+		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Emerald, FString::Printf(TEXT("Coordinates are X: %i, Y: %i, and cost is %i"), XCoordinate, YCoordinate, TraversalCost));
 	}
-
 	TileClickDelegate.Broadcast(this, XCoordinate, YCoordinate, ButtonPressed);
 }
 

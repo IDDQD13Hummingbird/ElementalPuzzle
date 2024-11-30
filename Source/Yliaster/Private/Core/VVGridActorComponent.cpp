@@ -16,6 +16,32 @@ UVVGridActorComponent::UVVGridActorComponent()
 	InteractingPlayer = nullptr;
 }
 
+void UVVGridActorComponent::InitializeTiles()
+{
+	TArray<UPrimitiveComponent*> OverlappedComponents;
+	GetOverlappingComponents(OverlappedComponents);
+	for (UPrimitiveComponent* Component : OverlappedComponents)
+	{
+		if (UVVTile* TileComponent = Cast<UVVTile>(Component))
+			ModifyTile(TileComponent);
+	}
+
+	if (!CurrentGrid)
+	{
+		TArray<AActor*> OverlappedActors;
+		GetOverlappingActors(OverlappedActors, TSubclassOf<AVVGrid>());
+		for (AActor* ActorN : OverlappedActors)
+		{
+			if (AVVGrid* NewGrid = Cast<AVVGrid>(ActorN))
+			{
+				CurrentGrid = NewGrid;
+				CurrentGrid->TileClickedDelegate.AddDynamic(this, &UVVGridActorComponent::GridClicked);
+				break;
+			}
+		}
+	}
+}
+
 void UVVGridActorComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (UVVTile* OverlappedTile = Cast<UVVTile>(OtherComp))
@@ -100,28 +126,7 @@ void UVVGridActorComponent::BeginPlay()
 	OnComponentBeginOverlap.AddDynamic(this, &UVVGridActorComponent::OnBeginOverlap);
 	OnComponentEndOverlap.AddDynamic(this, &UVVGridActorComponent::OnEndOverlap);
 
-	TArray<UPrimitiveComponent*> OverlappedComponents;
-	GetOverlappingComponents(OverlappedComponents);
-	for (UPrimitiveComponent* Component : OverlappedComponents)
-	{
-		if (UVVTile* TileComponent = Cast<UVVTile>(Component))
-			ModifyTile(TileComponent);
-	}
-	
-	if (!CurrentGrid)
-	{
-		TArray<AActor*> OverlappedActors;
-		GetOverlappingActors(OverlappedActors, TSubclassOf<AVVGrid>());
-		for (AActor* ActorN : OverlappedActors)
-		{
-			if (AVVGrid* NewGrid = Cast<AVVGrid>(ActorN))
-			{
-				CurrentGrid = NewGrid;
-				CurrentGrid->TileClickedDelegate.AddDynamic(this, &UVVGridActorComponent::GridClicked);
-				break;
-			}
-		}
-	}
+	GetOwner()->GetWorldTimerManager().SetTimer(InitDelay, this, &UVVGridActorComponent::InitializeTiles, 0.1f, false);
 }
 
 void UVVGridActorComponent::SetCost(int32 NewCost)

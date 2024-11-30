@@ -18,7 +18,7 @@ class AVVGrid;
 class UVVTile;
 class UVVUIComponent;
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGridRecievedSignature);
 
 UCLASS()
 class YLIASTER_API AMyChar : public ACharacter
@@ -115,6 +115,8 @@ public:
 	float TotalDistance;
 	float CurrentDistance;
 
+	UPROPERTY(BlueprintCallable, BlueprintAssignable, Category = "Grid")
+	FGridRecievedSignature GridRecievedDelegate;
 
 	// FUNCTIONS
 
