@@ -46,6 +46,8 @@ void AVVCombiner::Interact(APawn* InteractingPlayer)
 		ElementDisplay->SetVisibility(true);
 		return;
 	}
+	else if (EVVElementType CurrentElement = CurrentUI->CheckElement(); CurrentElement == ElementA)
+		return;
 
 	ElementB = CurrentUI->RemoveElement();
 
