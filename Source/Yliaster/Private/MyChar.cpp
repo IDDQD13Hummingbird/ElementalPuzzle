@@ -193,15 +193,13 @@ void AMyChar::CallRemoveElement()
 
 void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed)
 {
+	UVVTile* CurrentTarget = nullptr;
 	if (!TargetTile.IsEmpty())
 	{
-		UVVTile* TileA = CurrentTile;
-		UVVTile* TileB = TargetTile[0];
+		CurrentTarget = TargetTile[0];
 
 		TargetTile.Empty();
-		CurrentTile = TileB;
-		TargetTile.Add(TileA);
-		MovementDelta = 1 - MovementDelta;
+		TargetTile.Add(CurrentTarget);
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Grid Detected"));
 	StartLocation = GetActorLocation();
@@ -211,7 +209,7 @@ void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y,
 	Direction = Direction.GetSafeNormal();
 	CurrentDistance = 0.0f;
 
-	TargetTile.Append(GridReference->FindPath(CurrentTile, FetchedTileReference));
+	TargetTile.Append(GridReference->FindPath(CurrentTarget? CurrentTarget : CurrentTile, FetchedTileReference));
 
 	/*if (FetchedTileReference) {
 		if (CurrentDistance < TotalDistance) {
