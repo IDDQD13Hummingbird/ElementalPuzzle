@@ -34,9 +34,11 @@ void AVVGridActor::Tick(float DeltaTime)
 
 void AVVGridActor::Interact(APawn* InteractingPlayer)
 {
+#if WITH_EDITOR
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Emerald, FString::Printf(TEXT("Interaction Triggered")));
 	}
+#endif
 }
 

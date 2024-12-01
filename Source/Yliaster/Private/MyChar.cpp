@@ -102,7 +102,9 @@ void AMyChar::CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 	if (!GridReference) {
 		GridReference = Cast<AVVGrid>(OtherActor);
 		if (GridReference) {
+#if WITH_EDITOR
 			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called"));
+#endif
 			GridReference->TileClickedDelegate.AddDynamic(this, &AMyChar::GridDetectionTest);
 			GridRecievedDelegate.Broadcast();
 		}
@@ -125,7 +127,7 @@ void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 {
 	Interface = Cast<IInteractionInterface>(OtherActor);
 	if (Interface) {
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlaps with item"));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlaps with item"));
 		//Interface->InteractWithThis();
 	}
 }
@@ -134,7 +136,7 @@ void AMyChar::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* Othe
 {
 	if (Cast<AMyElement>(OtherActor)) {
 		//Interface = nullptr;
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping with item"));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping with item"));
 	}
 	
 	
@@ -147,7 +149,7 @@ void AMyChar::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* Othe
 
 void AMyChar::InteractOnInput()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("interact action pressed"));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("interact action pressed"));
 	if (Interface)
 	{
 		Interface->InteractWithThis(); //calls the function of the same name in the object it interacts with
@@ -182,7 +184,9 @@ void AMyChar::CallRemoveElement()
 				SpawnedElement->SetElement(ElementOfRemoved);
 				SpawnedElement->bCanBePickedUp = false;
 				SpawnedElement->SetActorLocation(PlayerLocation);
+#if WITH_EDITOR
 				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was spawned"));
+#endif
 			}
 		}
 		

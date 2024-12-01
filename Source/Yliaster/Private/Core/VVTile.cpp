@@ -52,10 +52,12 @@ void UVVTile::OnCursorOverlapEnd(UPrimitiveComponent* TouchedComponent)
 
 void UVVTile::OnCursorClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
 {
+#if WITH_EDITOR
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Emerald, FString::Printf(TEXT("Coordinates are X: %i, Y: %i, and cost is %i"), XCoordinate, YCoordinate, TraversalCost));
 	}
+#endif
 	TileClickDelegate.Broadcast(this, XCoordinate, YCoordinate, ButtonPressed);
 }
 
