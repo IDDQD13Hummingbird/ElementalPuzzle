@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+// THIS CLASS IS UNUSED
+
+
 #include "MyCharacter.h"
 #include "InventoryComponent.h"
 #include "Core/VVGrid.h"

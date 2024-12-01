@@ -48,7 +48,7 @@ public:
 	UVVElementIcon* AddElement(EVVElementType ElementType);
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	EVVElementType RemoveElement();
+	EVVElementType RemoveElement(); //pops the top element in the inventory and returns the element type
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	EVVElementType CheckElement();

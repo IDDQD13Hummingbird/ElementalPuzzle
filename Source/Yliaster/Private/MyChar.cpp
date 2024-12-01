@@ -55,6 +55,7 @@ void AMyChar::BeginPlay()
 		}
 	}
 	
+	// Declaring overlap dynamics
 	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &AMyChar::CheckGrid);
 	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &AMyChar::InteractOnOverlap);
 	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &AMyChar::InteractEnd);
@@ -67,12 +68,6 @@ void AMyChar::BeginPlay()
 void AMyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	/*if (CurrentDistance < TotalDistance) {
-		FVector Location = GetActorLocation();
-		Location += Direction * BaseMoveSpeed * DeltaTime;
-		SetActorLocation(Location);
-		CurrentDistance = (Location - StartLocation).Size();
-	}*/
 
 	if (!TargetTile.IsEmpty())
 	{
@@ -93,7 +88,6 @@ void AMyChar::Tick(float DeltaTime)
 
 FVector AMyChar::GetCharLocation()
 {
-
 	return FVector();
 }
 
@@ -103,7 +97,7 @@ void AMyChar::CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		GridReference = Cast<AVVGrid>(OtherActor);
 		if (GridReference) {
 #if WITH_EDITOR
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called"));
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called")); // only visible in the editor
 #endif
 			GridReference->TileClickedDelegate.AddDynamic(this, &AMyChar::GridDetectionTest);
 			GridRecievedDelegate.Broadcast();
@@ -115,12 +109,6 @@ void AMyChar::CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		if (UVVTile* TileReference = Cast<UVVTile>(OtherComponent))
 			CurrentTile = TileReference;
 	}
-	
-	/*TileReference = Cast<UVVTile>(OtherComponent);
-	if (TileReference) {
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("function called"));
-		TileReference->TileClickDelegate.AddDynamic(this, &AMyChar::GridDetectionTest);
-	}*/
 }
 
 void AMyChar::InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -138,13 +126,6 @@ void AMyChar::InteractEnd(UPrimitiveComponent* OverlappedComponent, AActor* Othe
 		//Interface = nullptr;
 		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping with item"));
 	}
-	
-	
-	/*Interface = Cast<IInteractionInterface>(OtherActor);
-	if (Interface) {
-		Interface = nullptr;
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Stopped Overlapping with item"));
-	}*/
 }
 
 void AMyChar::InteractOnInput()
@@ -171,34 +152,33 @@ void AMyChar::CallRemoveElement()
 		// Removes the element in the first spot in the element stack
 		//UIComponentReference->GetUIBase()->RemoveElement();
 
-		EVVElementType ElementOfRemoved = UIComponentReference->GetUIBase()->RemoveElement();
+		//pops the top element in the inventory and returns its element type
+		EVVElementType ElementOfRemoved = UIComponentReference->GetUIBase()->RemoveElement(); 
 
 		if (World && ElementOfRemoved != EVVElementType::Null) {
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			//SpawnParams.Owner = this;
-			//SpawnParams.Instigator = GetInstigator(); //this is the pawn responsible for the damage done by the spawned actor, this probably isn't needed here
 
+			// Spawns he element at the player location
 			AVVInWorldElement* SpawnedElement = World->SpawnActor<AVVInWorldElement>(SpawnedElementClass, PlayerLocation + FVector(0, 0, 150), PlayerRotation, SpawnParams);
 			if (SpawnedElement) {
-				SpawnedElement->SetElement(ElementOfRemoved);
+				SpawnedElement->SetElement(ElementOfRemoved); // Sets the element type to the type of the element we just popped
 				SpawnedElement->bCanBePickedUp = false;
 				SpawnedElement->SetActorLocation(PlayerLocation);
 #if WITH_EDITOR
-				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was spawned"));
+				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Element was spawned")); // only visible in the editor
 #endif
 			}
 		}
 		
 	}
 	
-
-
 }
 
 void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed)
 {
 	UVVTile* CurrentTarget = nullptr;
+	// checks if the array of tiles is empty, then adds the current target to the queue
 	if (!TargetTile.IsEmpty())
 	{
 		CurrentTarget = TargetTile[0];
@@ -214,18 +194,8 @@ void AMyChar::GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y,
 	Direction = Direction.GetSafeNormal();
 	CurrentDistance = 0.0f;
 
+	// Finds the optimal path to the target tile and moves the player along that path
 	TargetTile.Append(GridReference->FindPath(CurrentTarget? CurrentTarget : CurrentTile, FetchedTileReference));
-
-	/*if (FetchedTileReference) {
-		if (CurrentDistance < TotalDistance) {
-			FVector Location = GetActorLocation();
-			Location += Direction * BaseMoveSpeed;
-			SetActorLocation(Location);
-			CurrentDistance = (Location - StartLocation).Size();
-		}
-	}*/
-	
-
 }
 
 // Called to bind functionality to input

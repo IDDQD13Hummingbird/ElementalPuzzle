@@ -106,6 +106,7 @@ public:
 
 	// VARIABLES
 
+
 	// Base movement speed of the coontrolled character
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variable")
 	float BaseMoveSpeed = 5.0f;
@@ -122,11 +123,13 @@ public:
 
 
 	UFUNCTION()
-	FVector GetCharLocation();
+	FVector GetCharLocation(); 
 
-	UFUNCTION()
+	
+	UFUNCTION() 
 	void CheckGrid(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 		int32 OtherbodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	// Gets a reference to the grid and subscribes to its OnClicked event
 
 	UFUNCTION()
 	void InteractOnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
@@ -140,7 +143,7 @@ public:
 
 	void TestInput();
 
-	void CallRemoveElement();
+	void CallRemoveElement(); // drops the top element in the inventory at the players location
 
 	UFUNCTION()
 	void GridDetectionTest(UVVTile* FetchedTileReference, int32 X, int32 Y, FKey ButtonPressed);
