@@ -33,13 +33,13 @@ void UVV_Tile::OnCursorBeginOverlap(UPrimitiveComponent* TouchedComponent)
 		return;
 
 	if (!SourceData->bVisibleByDefault)
-		bHiddenInGame = false;
+		SetVisibility(true);
 
 	SetLineThickness(SourceData->HoveredThickness);
 	for (UVV_Tile* AdjacentTile : Adjacents)
 	{
 		if (!SourceData->bVisibleByDefault)
-			bHiddenInGame = false;
+			SetVisibility(true);
 
 		if (AdjacentTile)
 		AdjacentTile->SetLineThickness(SourceData->NeighborThickness);
@@ -52,13 +52,14 @@ void UVV_Tile::OnCursorEndOverlap(UPrimitiveComponent* TouchedComponent)
 		return;
 
 	if (!SourceData->bVisibleByDefault)
-		bHiddenInGame = true;
+		SetVisibility(false);
+	
 
 	SetLineThickness(SourceData->UnselectedThickness);
 	for (UVV_Tile* AdjacentTile : Adjacents)
 	{
 		if (!SourceData->bVisibleByDefault)
-			bHiddenInGame = false;
+			SetVisibility(false);
 
 		if (AdjacentTile)
 		AdjacentTile->SetLineThickness(SourceData->UnselectedThickness);
@@ -70,9 +71,9 @@ void UVV_Tile::OnCursorClicked(UPrimitiveComponent* TouchedComponent, FKey Butto
 	TileClickDelegate.ExecuteIfBound(this, GridPosition, ButtonPressed);
 }
 
-void UVV_Tile::PostInitProperties()
+void UVV_Tile::BeginPlay()
 {
-	Super::PostInitProperties();
+	Super::BeginPlay();
 
 	OnBeginCursorOver.AddDynamic(this, &UVV_Tile::OnCursorBeginOverlap);
 	OnEndCursorOver.AddDynamic(this, &UVV_Tile::OnCursorEndOverlap);

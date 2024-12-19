@@ -35,7 +35,7 @@ protected:
 	void OnCursorClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
 	
 public:
-	void PostInitProperties() override;
+	virtual void BeginPlay() override;
 
 	UFUNCTION()
 	void SetTileData(const FVV_TileData& InData);

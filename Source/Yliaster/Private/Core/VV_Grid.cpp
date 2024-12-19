@@ -10,6 +10,8 @@ AVV_Grid::AVV_Grid()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	TileData = FVV_TileData();
+
 	if (!RootComponent)
 		RootComponent = CreateDefaultSubobject<USceneComponent>(FName("GridRoot"));
 }
@@ -18,8 +20,6 @@ AVV_Grid::AVV_Grid()
 void AVV_Grid::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	RebuildGrid();
 }
 
 // Called every frame
@@ -29,6 +29,14 @@ void AVV_Grid::Tick(float DeltaTime)
 
 }
 
+void AVV_Grid::PostRegisterAllComponents()
+{
+	Super::PostRegisterAllComponents();
+
+	if (this)
+		RebuildGrid();
+}
+
 void AVV_Grid::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -36,6 +44,7 @@ void AVV_Grid::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEven
 	if (this)
 		RebuildGrid();
 }
+
 
 // Called when any tile is clicked
 void AVV_Grid::OnTileClicked(UVV_Tile* TileClicked, FIntPoint Coordinates, FKey KeyPressed)
@@ -51,11 +60,25 @@ void AVV_Grid::OnTileClicked(UVV_Tile* TileClicked, FIntPoint Coordinates, FKey 
 
 void AVV_Grid::RebuildGrid()
 {
-	if (!TileClass || RootComponent->GetNumChildrenComponents() == GridSize.X * GridSize.Y)
+	if (!GetWorld())
 		return;
-	
+
+
 	TArray<USceneComponent*> Tiles;
 	RootComponent->GetChildrenComponents(false, Tiles);
+
+	if (!TileClass || Tiles.Num() == GridSize.X * GridSize.Y)
+	{
+		for (USceneComponent* Tile : Tiles)
+		{
+			if (UVV_Tile* OldTile = Cast<UVV_Tile>(Tile))
+			{
+				OldTile->SetTileData(TileData);
+			}
+		}
+		return;
+	}
+	
 	for (USceneComponent* Var : Tiles)
 		Var->DestroyComponent();
 
@@ -77,6 +100,7 @@ void AVV_Grid::RebuildGrid()
 				NewTile->SetRelativeTransform(TargetLocation);
 				NewTile->SetTileData(TileData);
 				NewTile->RegisterComponent();
+				AddInstanceComponent(NewTile);
 
 				NewTile->SetGridPosition(FIntPoint(j, i));
 

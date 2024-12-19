@@ -18,5 +18,6 @@ class YLIASTER_API AVV_GameModeBase : public AGameModeBase
 protected:
 
 public:
-	
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+
 };

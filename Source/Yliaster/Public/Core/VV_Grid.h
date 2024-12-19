@@ -32,7 +32,7 @@ protected:
 	The desired size of the grid:
 	 X = Columns, Y = Rows
 	*/
-	UPROPERTY(EditAnywhere, Category = "Grid", meta = (ClampMin = "0"))
+	UPROPERTY(EditAnywhere, Category = "Grid", meta = (ClampMin = "1"))
 	FIntPoint GridSize = FIntPoint(10);
 
 	UFUNCTION()
@@ -46,6 +46,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PostRegisterAllComponents() override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")

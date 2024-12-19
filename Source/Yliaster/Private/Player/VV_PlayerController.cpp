@@ -7,6 +7,7 @@ AVV_PlayerController::AVV_PlayerController()
 {
 	bEnableClickEvents = 1;
 	bEnableMouseOverEvents = 1;
+	DefaultClickTraceChannel = ECollisionChannel::ECC_Visibility;
 }
 
 void AVV_PlayerController::BeginPlay()
