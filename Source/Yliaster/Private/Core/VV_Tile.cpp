@@ -90,3 +90,35 @@ FIntPoint UVV_Tile::GetGridPosition() const
 {
 	return GridPosition;
 }
+
+void UVV_Tile::UpdateModifier()
+{
+	int32 HighestValue = 0;
+	for (TPair<AActor*, int32> PairN : Modifiers)
+	{
+		if (PairN.Value < 0)
+		{
+			TraversalCost = PairN.Value;
+			return;
+		}
+
+		if (PairN.Value > HighestValue)
+			HighestValue = PairN.Value;
+	}
+	TraversalCost = HighestValue;
+}
+
+void UVV_Tile::RegisterTileActor(AActor* TileActor, int32 Modifier)
+{
+	Modifiers.Add(TileActor, Modifier);
+	UpdateModifier();
+}
+
+void UVV_Tile::UnregisterTileActor(AActor* TileActor)
+{
+	if (Modifiers.Contains(TileActor))
+	{
+		Modifiers.FindAndRemoveChecked(TileActor);
+		UpdateModifier();
+	}
+}

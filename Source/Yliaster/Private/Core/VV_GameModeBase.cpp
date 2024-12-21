@@ -2,10 +2,31 @@
 
 
 #include "Core/VV_GameModeBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerStart.h"
+#include "Core/VV_GridActorComponent.h"
+#include "Player/VV_PlayerController.h"
 
 AActor* AVV_GameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 {
-	AActor* PotentialSpawn = Super::ChoosePlayerStart(Player);
+	if (!GetWorld())
+		return nullptr;
 
-	return PotentialSpawn;
+	TArray<AActor*> PotentialSpawns;
+	AActor* SelectedSpawn = nullptr;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), PotentialSpawns);
+	for (AActor* SpawnRef : PotentialSpawns)
+	{
+		if (UVV_GridActorComponent* GridConnection = SpawnRef->GetComponentByClass<UVV_GridActorComponent>())
+		{
+			if (AVV_PlayerController* PlayerRef = Cast<AVV_PlayerController>(Player))
+			{
+				PlayerRef->ActiveGrid = GridConnection->ConnectedGrid;
+			}
+			SelectedSpawn = SpawnRef;
+		}
+	}
+
+	return SelectedSpawn;
 }

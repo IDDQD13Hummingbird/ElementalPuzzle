@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "VV_PlayerController.generated.h"
 
+class AVV_Grid;
+
 /**
  * 
  */
@@ -19,4 +21,7 @@ protected:
 
 public:
 	virtual void BeginPlay() override;
+
+	UPROPERTY()
+	AVV_Grid* ActiveGrid;
 };

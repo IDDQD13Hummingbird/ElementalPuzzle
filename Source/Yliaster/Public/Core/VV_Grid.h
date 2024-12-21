@@ -9,6 +9,9 @@
 
 class UVV_Tile;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnTileClickSignature, FIntPoint, GridCoordinate, FKey, ButtonPressed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGridRebuildSignature);
+
 UCLASS()
 class YLIASTER_API AVV_Grid : public AActor
 {
@@ -49,8 +52,11 @@ public:
 	virtual void PostRegisterAllComponents() override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
+	FOnTileClickSignature OnTileClickDelegate;
+
 	UFUNCTION(BlueprintCallable, Category = "Grid")
 	void RebuildGrid();
+	FOnGridRebuildSignature OnRebuildDelegate;
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")
 	FIntPoint CoordinateFromIndex(int32 Index);

@@ -55,6 +55,7 @@ void AVV_Grid::OnTileClicked(UVV_Tile* TileClicked, FIntPoint Coordinates, FKey 
 		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Emerald, FString::Printf(TEXT("Coordinates of tile clicked are X: %i, Y: %i"), Coordinates.X, Coordinates.Y));
 	}
 #endif
+	OnTileClickDelegate.Broadcast(Coordinates, KeyPressed);
 }
 
 
