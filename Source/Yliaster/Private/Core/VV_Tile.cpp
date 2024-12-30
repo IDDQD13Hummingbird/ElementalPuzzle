@@ -9,6 +9,7 @@ UVV_Tile::UVV_Tile()
 {
 	bHiddenInGame = false;
 
+	SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SetCollisionResponseToAllChannels(ECR_Ignore);
 	SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Overlap);

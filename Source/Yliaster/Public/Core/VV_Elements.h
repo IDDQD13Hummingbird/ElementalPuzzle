@@ -31,7 +31,8 @@ struct YLIASTER_API FVV_ElementData : public FDataTableRowHandle
 {
 	GENERATED_BODY()
 
-	
+	UPROPERTY()
+	EVV_ElementType Type;
 	TSharedPtr<UTexture2D> Icon;
 };
 

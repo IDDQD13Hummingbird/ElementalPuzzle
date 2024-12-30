@@ -16,17 +16,19 @@ AVV_Grid::AVV_Grid()
 		RootComponent = CreateDefaultSubobject<USceneComponent>(FName("GridRoot"));
 }
 
-// Called when the game starts or when spawned
 void AVV_Grid::BeginPlay()
 {
 	Super::BeginPlay();
-}
 
-// Called every frame
-void AVV_Grid::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	TArray<USceneComponent*> CurrentTiles;
+	RootComponent->GetChildrenComponents(false, CurrentTiles);
+	for (USceneComponent* Comp : CurrentTiles)
+	{
+		if (UVV_Tile* Tile = Cast<UVV_Tile>(Comp); Tile && !Tile->TileClickDelegate.IsBoundToObject(this))
+		{
+			Tile->TileClickDelegate.BindDynamic(this, &AVV_Grid::OnTileClicked);
+		}
+	}
 }
 
 void AVV_Grid::PostRegisterAllComponents()

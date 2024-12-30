@@ -21,7 +21,11 @@ protected:
 
 public:
 	virtual void BeginPlay() override;
+	virtual void AcknowledgePossession(APawn* P);
 
 	UPROPERTY()
 	AVV_Grid* ActiveGrid;
+
+	UPROPERTY()
+	FIntPoint StartTile;
 };

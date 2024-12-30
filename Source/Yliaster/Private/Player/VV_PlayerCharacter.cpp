@@ -2,6 +2,8 @@
 
 
 #include "Player/VV_PlayerCharacter.h"
+#include "Components/BoxComponent.h"
+#include "PaperFlipbookComponent.h"
 #include "Player/VV_Camera.h"
 
 // Sets default values
@@ -10,6 +12,19 @@ AVV_PlayerCharacter::AVV_PlayerCharacter()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	
+
+	if (!PlayerSprite)
+	{
+		PlayerSprite = CreateDefaultSubobject<UPaperFlipbookComponent>(FName("Sprite"));
+		RootComponent = PlayerSprite;
+	}
+	if (!InteractionRange)
+	{
+		InteractionRange = CreateDefaultSubobject<UBoxComponent>(FName("Reach"));
+		InteractionRange->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+		InteractionRange->SetupAttachment(RootComponent);
+	}
 	if (!Camera)
 	{
 		Camera = CreateDefaultSubobject<UVV_Camera>(FName("Camera"));
@@ -24,6 +39,7 @@ void AVV_PlayerCharacter::BeginPlay()
 	if (ActiveGrid)
 	{
 		Camera->SetActiveGrid(ActiveGrid);
+		Camera->SetLocationRef(GetActorLocation());
 	}
 }
 
@@ -39,5 +55,10 @@ void AVV_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AVV_PlayerCharacter::SetGrid(AVV_Grid* NewGrid)
+{
+	ActiveGrid = NewGrid;
 }
 

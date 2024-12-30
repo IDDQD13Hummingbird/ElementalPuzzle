@@ -48,4 +48,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Grid")
 	void SetLocationRef(const FVector& InPlayerLocation);
+
+	UPROPERTY(EditAnywhere, Category = "Camera")
+	float CameraOffset = 300;
 };

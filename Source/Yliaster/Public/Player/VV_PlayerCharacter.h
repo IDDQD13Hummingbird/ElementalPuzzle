@@ -7,6 +7,8 @@
 #include "VV_PlayerCharacter.generated.h"
 
 class AVV_Grid;
+class UBoxComponent;
+class UPaperFlipbookComponent;
 class UVV_Camera;
 
 UCLASS()
@@ -28,6 +30,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Grid")
 	AVV_Grid* ActiveGrid;
 
+	UPROPERTY(EditAnywhere, Category = "Sprite")
+	UPaperFlipbookComponent* PlayerSprite;
+
+	UPROPERTY(EditAnywhere, Category = "Player")
+	UBoxComponent* InteractionRange;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -35,4 +42,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION()
+	void SetGrid(AVV_Grid* NewGrid);
 };

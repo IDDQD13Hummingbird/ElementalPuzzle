@@ -19,7 +19,7 @@ void UVV_Camera::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 		SetWorldLocation(FVector(
 			FMath::Clamp(PlayerLocation->X, MinX, MaxX),
 			FMath::Clamp(PlayerLocation->Y, MinY, MaxY),
-			PlayerLocation->Z ));
+			PlayerLocation->Z + CameraOffset ));
 	}
 }
 
@@ -28,10 +28,14 @@ void UVV_Camera::SetActiveGrid(AVV_Grid* NewGrid)
 	ActiveGrid = NewGrid;
 	if (!ActiveGrid)
 		return;
-
-	SetWorldRotation(ActiveGrid->GetTransform().GetRotation());
+	
+	// Rotate Camera so its Forward vector = - Grid Up vector
+	FRotator GridRotation = ActiveGrid->GetActorRotation();
+	GridRotation.Pitch = GridRotation.Pitch - 90;
+	SetWorldRotation(GridRotation);
 
 	FVector TileSize = ActiveGrid->GetTile(FIntPoint(0, 0))->GetScaledBoxExtent();
+	TileSize.Z = 0;
 
 	GridMin = ActiveGrid->GetTile(FIntPoint(0, 0))->GetComponentLocation() - TileSize;
 	GridMax = ActiveGrid->GetTile(ActiveGrid->GetGridSize() - FIntPoint(1, 1))->GetComponentLocation() + TileSize;
